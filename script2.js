@@ -16,8 +16,6 @@ requestAsync('data.json')
     }, function (e) {
         console.log(e.target);
     });*/
-
-
 dataset={
   "filter":"Task failed",
   "values":[
@@ -108,4 +106,3 @@ function newFilter( datajson,dates,name){
 
 var DatesSelected = listDateSelected(dataset);
 const test =newFilter(dataset,DatesSelected,"Task failed");
-//console.log(test);
