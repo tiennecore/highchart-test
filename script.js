@@ -1,25 +1,3 @@
-dataset={
-  "filter":"Task failed",
-  "values":[
-    {
-      "date":"19-03-2019",
-      "activity":"1"
-    },{
-      "date":"19-03-2019",
-      "activity":"3"
-    },{
-      "date":"23-03-2019",
-      "activity":"2"
-    },{
-      "date":"23-03-2019",
-      "activity":"3"
-    },{
-      "date":"23-03-2019",
-      "activity":"3"
-    }
-  ]
-}
-
 function newActivity(name){
   const activity = {
     name:"",
@@ -32,7 +10,7 @@ function newActivity(name){
 }
 function listDateSelected( datajson){
   var dates=[];
-  datajson.values.forEach(function(element){
+  datajson.data.forEach(function(element){
     if (!dates.includes(element.date)){
       dates.push(element.date);
     }
@@ -41,7 +19,7 @@ function listDateSelected( datajson){
 }
 function listNameactivities( datajson, dates){
   var NbActivity=[]
-  datajson.values.forEach(function(e0){
+  datajson.data.forEach(function(e0){
     if (!NbActivity.includes(e0.activity)){
       NbActivity.push(e0.activity);
     }
@@ -65,8 +43,8 @@ function newFilter( datajson,dates,name){
     filter.listActivity.push(newActivity(listNameactivity[i]));
   }
   dates.forEach(function(e0){
-    console.log("jour de test :"+e0);
-    datajson.values.forEach(function(e1){
+    //console.log("jour de test :"+e0);
+    datajson.data.forEach(function(e1){
       if(e0==e1.date){
         var findactivity = filter.listActivity.find(function (activity){
           return activity.name == e1.activity
@@ -93,62 +71,91 @@ function dataToConf(filter){
   });
   return listconf;
 }
-function selectActivity(filter){
- 
+function setGraph(filter,dates){
+  var Conf= dataToConf(filter);
+  var myChart = Highcharts.chart('container', {
+    chart: {
+      type: 'column'
+    },
+    title: {
+      text: filter.name
+    },
+    xAxis: {
+      categories: dates
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: ''
+      },
+      stackLabels: {
+        enabled: true,
+        style: {
+          fontWeight: 'bold',
+          color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+        }
+      }
+    },
+    legend: {
+      align: 'right',
+      x: -30,
+      verticalAlign: 'top',
+      y: 25,
+      floating: true,
+      backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+      borderColor: '#CCC',
+      borderWidth: 1,
+      shadow: false
+    },
+    tooltip: {
+      headerFormat: '<b>{point.x}</b><br/>',
+      pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+    },
+    plotOptions: {
+      column: {
+        stacking: 'normal',
+        dataLabels: {
+          enabled: true,
+          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+        }
+      }
+    },
+    series: Conf
+  });
+}
+function selectActivity(filter,dates,name){
+  var findActiviy = filter.listActivity.find(function (activity){
+    return activity.name == name
+  });
+  var index=0;
+  var listIndex=[]
+  findActiviy.listdata.forEach(function(element){
+    if (element == 0){
+      dates.splice(index,1);
+      listIndex.unshift(index);
+    }
+  index++;
+  });
+  listIndex.forEach(function(element){
+    findActiviy.listdata.splice(element,1);
+  });
+  filter.listActivity = filter.listActivity.filter(function(element){
+    return element == findActiviy
+  });
 }
 
-var DatesSelected = listDateSelected(dataset);
-const Test =newFilter(dataset,DatesSelected,"Task failed");
-var Conf= dataToConf(Test);
-
-document.addEventListener('DOMContentLoaded', function () {
-    var myChart = Highcharts.chart('container', {
-      chart: {
-        type: 'column'
-      },
-      title: {
-        text: Test.name
-      },
-      xAxis: {
-        categories: DatesSelected
-      },
-      yAxis: {
-        min: 0,
-        title: {
-          text: ''
-        },
-        stackLabels: {
-          enabled: true,
-          style: {
-            fontWeight: 'bold',
-            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-          }
-        }
-      },
-      legend: {
-        align: 'right',
-        x: -30,
-        verticalAlign: 'top',
-        y: 25,
-        floating: true,
-        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-        borderColor: '#CCC',
-        borderWidth: 1,
-        shadow: false
-      },
-      tooltip: {
-        headerFormat: '<b>{point.x}</b><br/>',
-        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-      },
-      plotOptions: {
-        column: {
-          stacking: 'normal',
-          dataLabels: {
-            enabled: true,
-            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-          }
-        }
-      },
-      series: Conf
-    });
-});
+function onLoadData(link,filtername,activityName){
+  var req = new XMLHttpRequest();
+  req.overrideMimeType("application/json");
+  req.open('GET', link, true);
+  req.onload  = function() {
+     var dataset = JSON.parse(req.responseText);
+     var DatesSelected = listDateSelected(dataset);
+     const Filter = newFilter(dataset,DatesSelected,filtername);
+     if(activityName!=false){
+       selectActivity(Filter,DatesSelected,activityName);
+     }
+     setGraph(Filter,DatesSelected);
+  };
+  req.send(null);
+}
