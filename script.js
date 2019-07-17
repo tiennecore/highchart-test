@@ -73,7 +73,7 @@ function dataToConf(filter){
 }
 function setGraph(filter,dates){
   var Conf= dataToConf(filter);
-  var myChart = Highcharts.chart('container', {
+  var myChart = Highcharts.chart('graph', {
     chart: {
       type: 'column'
     },
@@ -143,7 +143,6 @@ function selectActivity(filter,dates,name){
     return element == findActiviy
   });
 }
-
 function onLoadData(link,filtername,activityName){
   var req = new XMLHttpRequest();
   req.overrideMimeType("application/json");

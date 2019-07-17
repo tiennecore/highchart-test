@@ -1,108 +1,35 @@
-/*
-function requestAsync( url) {
-    return new Promise(function (resolve, reject) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", url);
-        xhr.overrideMimeType("application/json");
-        xhr.onload = resolve;
-        xhr.onerror = reject;
-        xhr.send();
-    });
-}
-requestAsync('data.json')
-    .then(function (e) {
-        //var dataset = (e.target.response);
-        //console.log(dataset.data);
-    }, function (e) {
-        console.log(e.target);
-    });*/
-dataset={
-  "filter":"Task failed",
-  "values":[
-    {
-      "date":"19-03-2019",
-      "activity":"1"
-    },{
-      "date":"19-03-2019",
-      "activity":"3"
-    },{
-      "date":"23-03-2019",
-      "activity":"2"
-    },{
-      "date":"23-03-2019",
-      "activity":"3"
-    },{
-      "date":"23-03-2019",
-      "activity":"3"
-    }
-  ]
-}
 
+document.body.onload = initLoad("data.json",);
 
-function newActivity(name){
-  const activity = {
-    name:"",
-    description:"",
-    countTmp:0,
-    listdata:[]
-  }; //Object.create(activityPropriety);
-  activity.name = name;
-  return activity;
-}
-function listDateSelected( datajson){
-  var dates=[];
-  datajson.values.forEach(function(element){
-    if (!dates.includes(element.date)){
-      dates.push(element.date);
-    }
-  });
-  return dates;
-}
-function listNameactivities( datajson, dates){
-  var NbActivity=[]
-  datajson.values.forEach(function(e0){
-    if (!NbActivity.includes(e0.activity)){
-      NbActivity.push(e0.activity);
-    }
-  })
-  return NbActivity;
-}
-function nbOfActivities(datajson, dates){
-  var int = listNameactivities(datajson, dates);
-  return int.length;
-}
-
-function newFilter( datajson,dates,name){
-  const filter = {
-    name:"",
-    listActivity:[]
+function newHtmlActivity(name,filterName){
+  var div = document.createElement('button');
+  div.setAttribute("id", name);
+  div.onclick=function(){
+    onLoadData('data.json',filterName,name);
   };
-  filter.name = name;
-  var nbActivity = nbOfActivities(datajson, dates);
-  var i = 0;
-  var listNameactivity = listNameactivities( datajson, dates);
-  for (;i<nbActivity;i++){
-    filter.listActivity.push(newActivity(listNameactivity[i]));
-  }
-  dates.forEach(function(e0){
-    console.log("jour de test :"+e0);
-    datajson.values.forEach(function(e1){
-      if(e0==e1.date){
-        var findactivity = filter.listActivity.find(function (activity){
-          return activity.name == e1.activity
-        });
-        findactivity.countTmp++;
-      }
-    });
-    filter.listActivity.forEach(function(e4){
-      //console.log("show count activity "+e4.name+" : "+ e4.countTmp);
-      e4.listdata.push( e4.countTmp);
-      e4.countTmp=0;
-    });
-  });
-    console.log(filter);
-  return filter;
+  div.setAttribute("style", "color:red;width:100%;height:25px;");
+  var text = document.createTextNode(name);
+  div.appendChild(text);
+  return div
 }
-
-var DatesSelected = listDateSelected(dataset);
-const test =newFilter(dataset,DatesSelected,"Task failed");
+function listbutton(listNameActivities,div){
+  var allActivities = newHtmlActivity("all Activities","Task failed");
+  allActivities.setAttribute("id", "false");
+  div.appendChild(newHtmlActivity(false));
+  listNameActivities.forEach(function(activity){
+    div.appendChild(newHtmlActivity(activity));
+  });
+}
+function initLoad(link){
+  var req = new XMLHttpRequest();
+  req.overrideMimeType("application/json");
+  req.open('GET', link, true);
+  req.onload  = function() {
+     var dataset = JSON.parse(req.responseText);
+     var datesSelected = listDateSelected(dataset);
+     var listNames = listNameactivities(dataset,datesSelected);
+     var currentDiv = document.getElementById("activities");
+     listbutton(listNames,currentDiv);
+  };
+  req.send(null);
+}
