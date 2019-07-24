@@ -1,6 +1,7 @@
 var FilterDataSelected={};
 var FilterSelected="";
 var ListNames=[];
+
 function newActivity(name){
   const activity = {
     name:"",
@@ -127,7 +128,7 @@ function setGraph(filter,dates){
             point: {
                 events: {
                     click: function(){
-                      resultOnClickGraph(this.category,this.y,this.stackTotal,filter.name);
+                      resultOnClickGraph(this.category,this.y,this.stackTotal,this.series.name,filter.name);
                     }
                 }
             }
@@ -163,17 +164,15 @@ function createText(text){
   element.appendChild(node);
   return element;
 }
-function resultOnClickGraph(date,nbTask,totalTask,filterName){
+function resultOnClickGraph(date,nbTask,totalTask,activityName,filterName){
   var currentDiv = document.getElementById("graphInfo");
   while (currentDiv.firstChild) {
       currentDiv.removeChild(currentDiv.firstChild);
   }
-  //divText = document.createElement("p");
-  //var nextLine=  document.createElement("br");
-  //var text = document.createTextNode(name);
   currentDiv.appendChild(createText(("Date : "+date)));
-  currentDiv.appendChild(createText((filterName+" : "+nbTask)));
-  currentDiv.appendChild(createText(("Total of "+filterName+" : "+date)));
+  currentDiv.appendChild(createText(("filter : "+ filterName)));
+  currentDiv.appendChild(createText((activityName+" : "+nbTask)));
+  currentDiv.appendChild(createText(("Total of "+activityName+" : "+totalTask)));
 }
 function selectFilter(dataset,filterName){
   return dataset.studyRisk.find( filter => filter.name==filterName);
