@@ -1,5 +1,4 @@
 
-document.body.onload = initLoad("data.json",);
 
 function newHtmlActivity(name,filterName){
   var div = document.createElement('button');
@@ -21,7 +20,7 @@ function listbutton(listNameActivities,div,filterName){
   };
   allActivities.setAttribute("class","btn btn-light")
   allActivities.setAttribute("style", "width:100%;height:5vh;");
-  var activityText = document.createTextNode("all Activities");
+  var activityText = document.createTextNode("All Activities");
   allActivities.appendChild(activityText);
   div.appendChild(allActivities);
   listNameActivities.forEach(function(activity){

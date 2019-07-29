@@ -1,0 +1,67 @@
+body {
+
+    text-align: center;
+    font-family: arial;
+    padding-bottom: 40px;
+    color: #3d3d3d;
+
+}
+* {
+    font-family: arial;
+}
+table {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+th, td {
+    color: #3d3d3d;
+}
+.datepicker-1 {
+    position: relative;
+}
+.selectionDate-1{
+  z-index: 1;
+  position: absolute;
+  left: 8px;
+}
+.selectionDate-1 td {
+    font: 12px/20px arial;
+}
+table.calendrierPeriodeSelection-1{
+  margin: auto;
+  border: 1px solid #C0C0C0;
+  background-color: white;
+}
+.calendrierPeriodeSelection-1 td {
+    padding: 2px !important;
+}
+.form-control.input-sm {
+    padding: 5px 10px;
+    height: 28px;
+    font-size: 14px;
+    margin: 2px 0;
+}
+.form-control.input-sm.input-very-sm {
+    height: 20px !important;
+    font-size: 12px;
+    padding: 2px;
+}
+select.input-sm {
+    height: 30px;
+    line-height: 30px;
+}
+
+.form-control {
+    padding: 6px 12px;
+    height: 38px;
+    border: 1px solid #D1D4D4;
+    border-radius: 4px;
+    background-color: #fff;
+    background-image: none;
+    color: #3D3D3D;
+    font-size: 14px;
+    font-family: arial;
+    line-height: 1.42857;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
