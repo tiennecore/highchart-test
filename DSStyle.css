@@ -1,14 +1,13 @@
 body {
-
     text-align: center;
     font-family: arial;
-    padding-bottom: 40px;
     color: #3d3d3d;
-
 }
 * {
     font-family: arial;
+    box-sizing: border-box;
 }
+
 table {
   border: 0;
   margin: 0;
@@ -17,51 +16,170 @@ table {
 th, td {
     color: #3d3d3d;
 }
-.datepicker-1 {
-    position: relative;
+
+.columnFilter{
+  display: flex;
+  flex-direction: column;
+  height:100vh;
+  background-color: #f9f9f9;
+  padding: 0 5px;
 }
-.selectionDate-1{
-  z-index: 1;
-  position: absolute;
-  left: 8px;
+.columnFilter *{
+  width: auto;
+  font: 12px/20px Arial,sans-serif ;
+  color:#77797c;
+  font-weight: bold;
 }
-.selectionDate-1 td {
-    font: 12px/20px arial;
+.columnFilter span{
+  color:#b4b6ba;
+
 }
-table.calendrierPeriodeSelection-1{
-  margin: auto;
-  border: 1px solid #C0C0C0;
+.headerSelectedFilters{
+  margin-top: 4px;
+}
+.headerSelectedFilters> svg{
+  float: right;
+}
+.espaceSelectedFilters{
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  margin:5px 10px;
+  min-width: 100px;
+  min-height: 75px;
   background-color: white;
 }
-.calendrierPeriodeSelection-1 td {
-    padding: 2px !important;
+
+.case.presentation.SelectedFilters{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  vertical-align: middle;
+  height: auto;
+  width: 100%;
+  border-bottom: 1px solid #D1D4D4;
 }
-.form-control.input-sm {
-    padding: 5px 10px;
-    height: 28px;
-    font-size: 14px;
-    margin: 2px 0;
+.case.presentation.SelectedFilters>div{
+  margin-left: 5px;
 }
-.form-control.input-sm.input-very-sm {
-    height: 20px !important;
-    font-size: 12px;
-    padding: 2px;
+.fa-trash-alt{
+  margin:auto 0;
 }
-select.input-sm {
-    height: 30px;
-    line-height: 30px;
+.TitleSelectedFilters{
+  vertical-align: middle;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 2px 10px;
 }
 
-.form-control {
-    padding: 6px 12px;
-    height: 38px;
-    border: 1px solid #D1D4D4;
-    border-radius: 4px;
-    background-color: #fff;
-    background-image: none;
-    color: #3D3D3D;
-    font-size: 14px;
-    font-family: arial;
-    line-height: 1.42857;
-    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+.TitleSelectedFilters > svg{
+  margin:auto 0;
+}
+.searchFilter{
+  display: flex;
+}
+
+.espaceFilter{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin:5px 10px;
+  min-width: 100px;
+  min-height: 50%;
+  background-color: white;
+}
+
+.filter.activities{
+  display: flex;
+  flex-direction: column;
+}
+.filter.activities.label{
+  display: flex;
+  flex-direction: row;
+}
+.filter.activities.label > *{
+  margin:auto 2px;
+}
+.filter.contain.value{
+  display: none;
+  flex-direction: column;
+}
+.filter.activity.value{
+  text-align: left;
+  margin-left: 12px;
+}
+.filter.activity.value:hover{
+  color:#368ec4;
+}
+
+.filter.date.begin{
+  display: flex;
+  flex-direction: column;
+}
+.filter.date.label{
+  display: flex;
+  flex-direction: row;
+}
+.filter.date.label>*{
+  margin:auto 2px;
+}
+.datePicker{
+  margin:0 auto;
+  text-align: center;
+  display: none;
+}
+.calendarBlockDay:hover {
+    background-color: #097698;
+    color: #FFFFFF;
+}
+.calendar{
+  margin: 2px auto;
+}
+.calendar th {
+    padding: 0;
+    background-color: #368ec4;
+    font: bold 10px/16px arial;
+    color: white;
+    text-align: center;
+}
+.calendar td{
+  border: 1px solid #FFFFFF;
+}
+
+.containerValue{
+  min-width: 250px;
+  margin: auto auto;
+  width: 90%;
+}
+.graphValue{
+  width: 100%;
+  min-width: 310px;
+  height: 65vh;
+  margin: auto auto
+
+}
+
+
+
+
+
+.menuActivity{
+  border: 1px solid #D1D4D4;
+  vertical-align: middle;
+  padding: .50rem 1rem;
+  border-width: 0 0 1px 0;
+
+}
+.menuActivity:hover{
+  background-color: #097698;
+  color: #FFFFFF;
+}
+.selectedName{
+  display: table-cell;
+  min-width: 10px;
+  width: 8%;
+  height: 100%;
+  background-color: #42a2da;
+
 }

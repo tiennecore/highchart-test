@@ -7,6 +7,7 @@ DatesSelected=['','']
 DateBegin='';
 DateEnds='';
 ActivityName='';
+NameSelected=[];
 //création des objets
 function newActivity(name){
   const activity = {
@@ -114,6 +115,11 @@ function listofDate(list){
   return newList;
 }
 
+//selection activity ListNames
+function la(){
+
+}
+
 // quantité de donnée
 
 
@@ -160,11 +166,7 @@ function setGraph(filter,dates){
     },
     plotOptions: {
       column: {
-        stacking: 'normal',
-        dataLabels: {
-          enabled: true,
-          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-        }
+        stacking: 'normal'
       },
       series: {
             cursor: 'pointer',
@@ -181,12 +183,12 @@ function setGraph(filter,dates){
   });
 }
 function selectActivity(filter,dates,name){
-  var findActiviy = filter.listActivity.find(function (activity){
+  var findActivity = filter.listActivity.find(function (activity){
     return activity.name == name
   });
   var index=0;
   var listIndex=[]
-  findActiviy.listdata.forEach(function(element){
+  findActivity.listdata.forEach(function(element){
     if (element == 0){
       listIndex.unshift(index);
     }
@@ -200,6 +202,17 @@ function selectActivity(filter,dates,name){
   filter.listActivity = filter.listActivity.filter(function(element){
     return element == findActiviy
   });
+}
+function selectActivities(filter,dates,names){
+  var listfindActivity=[];
+  names.forEach(function(idActivity){
+    var findActivity = filter.listActivity.find(function (activity){
+      return activity.name == idActivity
+    });
+    listfindActivity.push(findActivity);
+  })
+
+  console.log(listfindActivity);
 }
 function createText(text){
   var element = document.createElement("p");
@@ -222,13 +235,14 @@ function selectFilter(dataset,filterName){
 }
 function editActivityFunction (filterName){
   var currentDiv = document.getElementById("activities");
-  while (currentDiv.firstChild) {
-      currentDiv.removeChild(currentDiv.firstChild);
-  }
-  listbutton(ListNames,currentDiv,FilterDataSelected.name);
-  currentDiv.childNodes.forEach(function (activity){
+  var value =currentDiv.lastChild.value
+  currentDiv.removeChild(currentDiv.lastChild);
+
+  listbutton(ListNames,currentDiv,FilterDataSelected.name,value);
+  currentDiv.lastChild.childNodes.forEach(function (activity){
     activity.onclick=function(){
-      onLoadData('data.json',filterName,activity.id,);
+      NameSelected.push(activity.id);
+      onLoadData('data.json',filterName,NameSelected,);
     }
   });
 }
@@ -238,22 +252,29 @@ function dateSetUp(listDates){
 
     DatesSelected[0]=ListDates[0];
     DateBegin=DatesSelected[0];
-    var dateBeginGraph = DatesSelected[0].split("-");
-    init(dateBeginGraph[1],1,dateBeginGraph[2],dateBeginGraph[0]);
 
     DatesSelected[1]=ListDates[ListDates.length-1];
     DateEnds=DatesSelected[1];
+
+    var dateBeginGraph = DatesSelected[0].split("-");
+    init(dateBeginGraph[1],1,dateBeginGraph[2],dateBeginGraph[0]-1,DatesSelected);
+
+
     var dateEndsGraph = DatesSelected[1].split("-");
-    init(dateEndsGraph[1],2,dateEndsGraph[2],dateEndsGraph[0]);
+    init(dateEndsGraph[1],2,dateEndsGraph[2],dateEndsGraph[0]-1,DatesSelected);
 
   }else{
     //ListDates= trierDates(listDates);
     if(FilterSelected==FilterDataSelected.name){
       if (stringToDate(DatesSelected[0]) < stringToDate(DateBegin) ){
         DatesSelected[0]=DateBegin;
+        var newDateWrite=DatesSelected[0].split('-');
+        getVal(newDateWrite[1],1,newDateWrite[2],newDateWrite[0]);
       }
       if ( stringToDate(DatesSelected[1]) > stringToDate(DateEnds) ){
         DatesSelected[1]=DateEnds;
+        var newDateWrite=DatesSelected[1].split('-');
+        getVal(newDateWrite[1],1,newDateWrite[2],newDateWrite[0]);
       }
       var dateBeginGraph= stringToDate(DatesSelected[0]);
       var dateEndsGraph= stringToDate(DatesSelected[1]);
@@ -266,28 +287,28 @@ function dateSetUp(listDates){
       });
       ListDates= trierDates(listDatesGraph);
       var dateBeginSplit = DatesSelected[0].split("-");
-      initNewFilter(1,dateBeginSplit[2],dateBeginSplit[0]);
+      initNewFilter(1,dateBeginSplit[2],dateBeginSplit[0],DatesSelected);
 
       var dateEndsSplit = DatesSelected[1].split("-");
-      initNewFilter(2,dateEndsSplit[2],dateEndsSplit[0]);
+      initNewFilter(2,dateEndsSplit[2],dateEndsSplit[0],DatesSelected);
     }else {
       ListDates= trierDates(listDates);
 
       DatesSelected[0]=ListDates[0];
       DateBegin=DatesSelected[0];
       var dateBeginGraph = DatesSelected[0].split("-");
-      init(dateBeginGraph[1],1,dateBeginGraph[2],dateBeginGraph[0]);
+      init(dateBeginGraph[1],1,dateBeginGraph[2],dateBeginGraph[0],DatesSelected);
 
       DatesSelected[1]=ListDates[ListDates.length-1];
       DateEnds=DatesSelected[1];
       var dateEndsGraph = DatesSelected[1].split("-");
-      init(dateEndsGraph[1],2,dateEndsGraph[2],dateEndsGraph[0]);
+      init(dateEndsGraph[1],2,dateEndsGraph[2],dateEndsGraph[0],DatesSelected);
     }
   }
 }
 
 //fonction principale (main)
-function onLoadData(link,filtername,activityName,callback){
+function onLoadData(link,filtername,activities,callback){
   var req = new XMLHttpRequest();
   req.overrideMimeType("application/json");
   req.open('GET', link, true);
@@ -298,14 +319,14 @@ function onLoadData(link,filtername,activityName,callback){
      var listdates= listDateSelected(FilterDataSelected);
      dateSetUp(listdates);
      FilterSelected=FilterDataSelected.name;
-     ActivityName=activityName;
      ListNames = listNameactivities(FilterDataSelected,ListDates);
+     console.log(ListNames);
      Filter = newFilter(FilterDataSelected,ListDates,filtername);
-     if(activityName!="false"){
-       selectActivity(Filter,ListDates,activityName);
+     if(activities.length!=0){
+       selectActivities(Filter,ListDates,activities);
      }
      setGraph(Filter,ListDates);
      if (callback) callback();
   };
-  req.send(null);
+  req.send();
 }

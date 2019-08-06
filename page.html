@@ -2,75 +2,103 @@
 <html lang="fr" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <link rel="shortcut icon" href="#">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" >
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="fontawesome/js/all.js">
+
+    </script>
     <script type="text/javascript"src="weekpikcer.js"></script>
     <script type="text/javascript" src="script.js"></script>
     <script type="text/javascript" src="script2.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="DSStyle.css">
+
     <title>Study Risk Manager</title>
 
   </head>
   <body>
 
     <div class="container-fluid">
-      <div class="row"id="filterSelection">
-        <div class="col"></div>
-        <div class="col-7"style="min-width: 310px; height: 10vh; margin: auto auto">
-          <select class="form-control" id="filterForm" style="margin-top:3vh;">
-          </select>
-        </div>
-        <div class="col"></div>
-      </div>
-      <div class="row"id="graphActivitiesResult">
-        <div class="col"id="activities"style="min-width: 100px; height: 50vh; margin: 0 auto;border:1px;margin-top:10vh;"></div>
-        <div class="col-7"id="graph"style="min-width: 310px; height: 65vh; margin: 0 auto"></div>
-        <div class="col"id="graphInfo"></div>
-      </div>
-      <div class="row"id="dateText">
-        <div class="col-1"></div>
-        <div class="col" id="columnDate-1" style="float: none;margin-top:-9vh;margin-right:5vh;">
-            <input type="text" style="float: right;max-width: 100px;text-align: center;height:4vh;" id="inputDate-1" >
-        </div>
-        <div class="col-6"></div>
-        <div class="col" id="columnDate-2" style="float: none;margin-top:-9vh;margin-right:5vh;">
-            <input type="text" style="float: right;max-width: 100px;text-align: center;height:4vh;" id="inputDate-2" >
-        </div>
-        <div class="col-1"></div>
-
-      </div>
-      <div class="row"id="dateSelection-1">
-        <div class="col-1"></div>
-        <div class="col">
-          <div id="datepicker-1" style="position:relative;">
-            <div id="selectionDate-1"style="margin: 0 auto;"></div>
-            <table  id="calendar-1">
-            </table>
+      <div class="row">
+        <div class="col-2 columnFilter">
+          <div class="headerSelectedFilters">
+            <i class="fas fa-filter"></i>
           </div>
-        </div>
-        <div class="col-6"></div>
-        <div class="col">
-          <div id="datepicker-2" style="display:none;margin-top:-4.5vh;">
-            <div id="selectionDate-2"style="display:flex;margin: 0 auto;">
+          <div class="espaceSelectedFilters"id='selectedValues'>
+            <div class="case presentation SelectedFilters">
+              <div >
+                <i class="fas fa-caret-down"></i>
+                <span>Selected Filters</span>
+              </div>
+              <i class="fas fa-trash-alt "></i>
             </div>
-            <table  id="calendar-2">
-            </table>
+          </div>
+          <div class="TitleSelectedFilters">
+            <div>
+              <span>Filters</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <i class="fas fa-search "></i>
+          </div>
+          <input class='searchFilter'type="text" name="" value="">
+          <div class="espaceFilter">
+            <div class="filter activities"id='activities'>
+              <div class="filter activities label" id='menuFilterLabel'>
+                  <i class="fas fa-caret-right"></i>
+                  <i class="fas fa-filter"></i>
+                  <span>Activities</span>
+              </div>
+            </div>
+            <div class="filter date begin">
+              <div class="filter date label"id='filterDateLabel-1'value='0'>
+                <i class="fas fa-caret-right"></i>
+                <i class="far fa-calendar-alt"></i>
+                <span>Date begin</span>
+              </div>
+              <input type="text" class="datePicker" autocomplete="false" id="inputDate-1" >
+              <div class='' id="datepicker-1" >
+                <div class='selectionDate' id="selectionDate-1"></div>
+                <table  class='calendar' id="calendar-1"></table>
+              </div>
+            </div>
+            <div class="filter date end">
+              <div class="filter date label"id='filterDateLabel-2'value='0'>
+                <i class="fas fa-caret-right"></i>
+                <i class="far fa-calendar-alt"></i>
+                <span>Date End</span>
+              </div>
+              <input type="text" class="datePicker" autocomplete="false" id="inputDate-2" >
+              <div  id="datepicker-2" >
+                <div class='selectionDate' id="selectionDate-2"></div>
+                <table  class='calendar' id="calendar-2"></table>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="col-1"></div>
+        <div class="col-7">
+          <div class="row filterSelection"id="filterSelection">
+            <div class="containerValue">
+              <select class="form-control input-sm" id="filterForm" style="margin-top:3vh;margin-bottom:1vh;">
+              </select>
+            </div>
+          </div>
+          <div class="row"id="graphActivitiesResult">
+            <div class="graphValue"id="graph"></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="col"id="graphInfo"></div>
+        </div>
       </div>
     </div>
 
   </body>
   <script type="text/javascript">
     document.body.onload =function(){
-      initLoad("data.json");
+      initLoad("data.json");style="justify-content: center;"
     }
   </script>
 </html>

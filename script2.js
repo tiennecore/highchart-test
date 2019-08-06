@@ -1,31 +1,57 @@
 
 
 function newHtmlActivity(name,filterName){
-  var div = document.createElement('button');
-  div.setAttribute("class","btn btn-light")
-  div.setAttribute("id", name);
-  div.onclick=function(){
-    onLoadData('data.json',filterName,name,);
+
+  var elementList = document.createElement('span');
+  elementList.setAttribute("id", name);
+  elementList.setAttribute("class", 'filter activity value');
+  elementList.onclick=function(){
+    NameSelected.push(name);
+    onLoadData('data.json',filterName,NameSelected,);
   };
-  div.setAttribute("style", "width:100%;height:5vh;");
-  var text = document.createTextNode(name);
-  div.appendChild(text);
-  return div
+  elementList.textContent =name;
+  return elementList;
 }
-function listbutton(listNameActivities,div,filterName){
-  var allActivities = document.createElement('button');
-  allActivities.setAttribute("id", "false");
+function listbutton(listNameActivities,div,filterName,value){
+  var containerdiv= document.createElement('div');
+  containerdiv.setAttribute('value',value);
+  containerdiv.setAttribute('class','filter contain value');
+  containerdiv.setAttribute('id','filterContainerValue');
+  var icon= document.createElement('i');
+  var allActivities = document.getElementById('menuFilterLabel');
+  if(containerdiv.value==0){
+    containerdiv.style.display='none';
+    allActivities.removeChild(allActivities.children[0]);
+    icon.setAttribute('class','fas fa-caret-right');
+    allActivities.insertBefore(icon,allActivities.children[0]);
+    containerdiv.value=0;
+  }else{
+    containerdiv.style.display='flex';
+    containerdiv.value=1;
+    allActivities.removeChild(allActivities.children[0]);
+    icon.setAttribute('class','fas fa-caret-down');
+    allActivities.insertBefore(icon,allActivities.children[0]);
+  }
   allActivities.onclick=function(){
-    onLoadData('data.json',filterName,"false",);
+    if(containerdiv.value==0){
+      containerdiv.style.display='flex';
+      containerdiv.value=1;
+      allActivities.removeChild(allActivities.children[0]);
+      icon.setAttribute('class','fas fa-caret-down');
+      allActivities.insertBefore(icon,allActivities.children[0]);
+    }else{
+      containerdiv.style.display='none';
+      allActivities.removeChild(allActivities.children[0]);
+      icon.setAttribute('class','fas fa-caret-right');
+      allActivities.insertBefore(icon,allActivities.children[0]);
+      containerdiv.value=0;
+    }
   };
-  allActivities.setAttribute("class","btn btn-light")
-  allActivities.setAttribute("style", "width:100%;height:5vh;");
-  var activityText = document.createTextNode("All Activities");
-  allActivities.appendChild(activityText);
-  div.appendChild(allActivities);
+
   listNameActivities.forEach(function(activity){
-    div.appendChild(newHtmlActivity(activity,filterName));
+    containerdiv.appendChild(newHtmlActivity(activity,filterName));
   });
+  div.appendChild(containerdiv);
 }
 function initFormFilter(dataset){
   var currentDiv = document.getElementById("filterForm");
@@ -37,7 +63,7 @@ function initFormFilter(dataset){
     currentDiv.appendChild(optionDiv);
   });
   currentDiv.onchange=function(){
-    onLoadData('data.json',document.getElementById("filterForm").value,"false",function(){
+    onLoadData('data.json',document.getElementById("filterForm").value,[],function(){
       editActivityFunction(document.getElementById("filterForm").value);
     });
   };
@@ -55,8 +81,8 @@ function initLoad(link){
      var datesSelected = listDateSelected(FilterDataSelected);
      ListNames = listNameactivities(FilterDataSelected,datesSelected);
      var currentDiv = document.getElementById("activities");
-     listbutton(ListNames,currentDiv,FilterDataSelected.name);
-     onLoadData('data.json',FilterDataSelected.name,"false",);
+     listbutton(ListNames,currentDiv,FilterDataSelected.name,0);
+     onLoadData('data.json',FilterDataSelected.name,[],);
   };
   req.send(null);
 }

@@ -1,15 +1,7 @@
 mos=['January','February','March','April','May','June','July','August','September','October','Novemeber','Decemeber']
 daylist=['Sun', 'Mon', 'Tue', 'Wed' , 'Thu', 'Fri', 'Sat']
-function getVal(e,divCalendarValue,year,monthValue){
-   //lert(document.getElementById(e.id).value);
-   day = e.defaultValue;
-   var datepicker=document.getElementById('datepicker-'+divCalendarValue);
-   datepicker.style.display = 'none';
-   if (day<10){day="0"+day}
-   if ((monthValue + 1)<10){monthValue='0'+(monthValue+1)}
-   document.getElementById('inputDate-'+divCalendarValue).value = monthValue+"-"+day+"-"+year ;
-}
-function initValMY(divCalendarValue,year,month){
+
+function initValMY(divCalendarValue,year,month,listDates){
   if(month<10 && typeof month == "string"){
     var monthValue=month.split('0');
   }else {
@@ -17,6 +9,7 @@ function initValMY(divCalendarValue,year,month){
   }
 
   var tableMY=document.createElement('calendrierPeriodeSelection-'+divCalendarValue);
+  tableMY.setAttribute('class','calendrierPeriodeSelection');
   tableMY.cellspacing="0";
   tableMY.cellpadding="5";
   tableMY.border="0";
@@ -32,14 +25,9 @@ function initValMY(divCalendarValue,year,month){
   var element1= document.createElement('td');
   element1.setAttribute('valign','middle');
   element1.setAttribute('align','center');
-  var buttonLastMonth = document.createElement('button');
+  var buttonLastMonth = document.createElement('img');
   buttonLastMonth.setAttribute('id','buttonLastMonth-'+divCalendarValue);
-  buttonLastMonth.style.Height='20px';
-  buttonLastMonth.style.Width='20px';
-  buttonLastMonth.style.backgroundColor='red';
-  var icon = document.createElement('span');
-  icon.setAttribute('class','glyphicon glyphicon-chevron-left');
-  buttonLastMonth.appendChild(icon);
+  buttonLastMonth.src='chevron-left.svg';
   buttonLastMonth.onclick=function(){
     lastMonth(divCalendarValue,monthValue[1],year);
   }
@@ -61,7 +49,7 @@ function initValMY(divCalendarValue,year,month){
     optionMonth.label=mois;
     monthElement.appendChild(optionMonth);
   });
-  monthElement.selectedIndex=monthValue[1]-1;
+  monthElement.selectedIndex=monthValue[1];
   monthElement.onchange=function (){
     var newYearValue=document.getElementById('yearValue-'+divCalendarValue);
     thisMonth(divCalendarValue,this.selectedIndex,newYearValue);
@@ -76,20 +64,15 @@ function initValMY(divCalendarValue,year,month){
   var yearElement = document.createElement('select');
   yearElement.setAttribute('id','yearValue-'+divCalendarValue);
   yearElement.setAttribute('class','form-control input-sm input-very-sm');
-  // à modifier sur la liste de de date max
-  for(i=5;i!=0;i--){
+  var listYears=initNbYear(listDates);
+  listYears.forEach(function (year){
     var optionYear = document.createElement('option');
-    optionYear.value=year-i;
-    optionYear.label=year-i;
+    optionYear.value=year;
+    optionYear.label=year;
     yearElement.appendChild(optionYear);
-  }
-  for(i=0;i<6;i++){
-    var optionYear = document.createElement('option');
-    optionYear.value=parseInt(year)+i;
-    optionYear.label=parseInt(year)+i;
-    yearElement.appendChild(optionYear);
-  }
-  yearElement.selectedIndex=5;
+  });
+
+  yearElement.selectedIndex=0;
   yearElement.onchange=function (){
     var newmonthValue=document.getElementById('monthValue-'+divCalendarValue).selectedIndex;
     thisYear(divCalendarValue,newmonthValue,this);
@@ -101,15 +84,9 @@ function initValMY(divCalendarValue,year,month){
   var element4= document.createElement('td');
   element4.setAttribute('valign','middle');
   element4.setAttribute('align','center');
-  var buttonNextMonth = document.createElement('button');
+  var buttonNextMonth = document.createElement('img');
   buttonNextMonth.setAttribute('id','buttonNextMonth-'+divCalendarValue);
-  buttonNextMonth.style.Height='20px';
-  buttonNextMonth.style.Width='20px';
-  buttonNextMonth.style.marginRight='7px';
-  buttonNextMonth.style.backgroundColor='red';
-  var icon = document.createElement('span');
-  icon.setAttribute('class','glyphicon glyphicon-chevron-right');
-  buttonNextMonth.appendChild(icon);
+  buttonNextMonth.src='chevron-right.svg';
   buttonNextMonth.onclick=function(){
     nextMonth(divCalendarValue,monthValue[1],year);
   }
@@ -119,6 +96,18 @@ function initValMY(divCalendarValue,year,month){
   tbody.appendChild(line);
   tableMY.appendChild(tbody);
   currentDiv.appendChild(tableMY);
+}
+function initNbYear(datesLimits){
+  var years=[];
+  datesLimits.forEach(function(date){
+    var tmpdatelimit=date.split('-');
+    years.push(tmpdatelimit[2]);
+  });
+  var listYears=[]
+  for(years[0];years[0]<=years[1];years[0]++){
+    listYears.push(years[0]);
+  }
+  return listYears;
 }
 function editButton(button,callback){
   document.getElementById(button).onclick=function(){
@@ -150,31 +139,39 @@ function calendar(month,divCalendarValue,year){
     line.setAttribute('id',i);
     for(rw = 0; rw < 7; rw++ ){
       if (offset==0){
-        var element = document.createElement('td');
-        var elementValue = document.createElement('input');
-        elementValue.setAttribute('class','btn btn-outline-primary');
-        elementValue.setAttribute('type','button');
-        elementValue.setAttribute('value',dayCount);
-        elementValue.style.height='26px';
-        elementValue.style.paddingTop='0px';
-        elementValue.style.paddingBottom='0px';
-        elementValue.style.paddingLeft='2px';
-        elementValue.style.textAlign='center';
-        elementValue.style.width='26px';
-        elementValue.onclick= function(){
-          getVal(this,divCalendarValue,year,month);
-          DatesSelected[divCalendarValue-1]=document.getElementById('inputDate-'+divCalendarValue).value;
-          onLoadData('data.json',FilterSelected,ActivityName,)
-        };
-        element.appendChild(elementValue);
-        line.appendChild(element);
-        if(dayCount >= lastDay.getDate())
+        if(dayCount <= lastDay.getDate())
         {
-          break;
+          var element = document.createElement('td');
+          var elementValue = document.createElement('span');
+          element.setAttribute('class','calendarBlockDay ');
+          elementValue.textContent=dayCount;
+          elementValue.style.font='12px/20px arial';
+          elementValue.style.textAlign='center';
+          element.style.height='auto';
+          element.style.width='auto';
+          element.style.padding='4px 7px';
+          element.style.borderColor='#C0C0C0';
+          element.onclick= function(){
+            getVal(this.textContent,divCalendarValue,year,month);
+            DatesSelected[divCalendarValue-1]=document.getElementById('inputDate-'+divCalendarValue).value;
+            onLoadData('data.json',FilterSelected,ActivityName,function(){
+              editActivityFunction(document.getElementById("filterForm").value);
+            });
+          };
+          element.appendChild(elementValue);
+          line.appendChild(element);
+          dayCount++;
+        }else{
+          var element = document.createElement('td');
+          element.style.backgroundColor='#e2e4e3';
+          element.style.borderColor='#C0C0C0';
+          line.appendChild(element);
         }
-        dayCount++;
+
       }else{
         var element = document.createElement('td');
+        element.style.backgroundColor='#e2e4e3';
+        element.style.borderColor='#C0C0C0';
         line.appendChild(element);
         offset--;
       }
@@ -183,6 +180,7 @@ function calendar(month,divCalendarValue,year){
   }
   currentDiv.appendChild(bodyTable);
 }
+
 function getDays(month,divCalendarValue,year){
   var table= document.getElementById('calendar-'+divCalendarValue);
   while (table.firstChild) {
@@ -192,6 +190,16 @@ function getDays(month,divCalendarValue,year){
   calendar(month,divCalendarValue,year);
 
 }
+function getVal(e,divCalendarValue,year,monthValue){
+   //lert(document.getElementById(e.id).value);
+   day = e;
+   var datepicker=document.getElementById('datepicker-'+divCalendarValue);
+   datepicker.style.display = 'none';
+   if (day<10){day="0"+day}
+   if ((monthValue + 1)<10){monthValue='0'+(monthValue+1)}
+   document.getElementById('inputDate-'+divCalendarValue).value = monthValue+"-"+day+"-"+year ;
+}
+
 function nextMonth(divCalendar,monthValue,year){
   if(monthValue < 11){
     monthValue =  parseInt(monthValue)+1;
@@ -251,9 +259,35 @@ function thisMonth(divCalendar,monthValue,year){
   });
   document.getElementById("monthValue-"+divCalendar).selectedIndex=monthValue;
 }
-function init(dayinit,calendarvalue,year,month){
+function buttonfiltre(calendarvalue){
+  var datepicker=document.getElementById('datepicker-'+calendarvalue);
+  var dateinput=document.getElementById('inputDate-'+calendarvalue);
+  var begin = document.getElementById('filterDateLabel-'+calendarvalue);
+  var icon= document.createElement('i');
+
+  begin.onclick=function(){
+    if(begin.value==0){
+      dateinput.style.display='flex';
+      begin.value=1;
+      begin.removeChild(begin.children[0]);
+      icon.setAttribute('class','fas fa-caret-down');
+      begin.insertBefore(icon,begin.children[0]);
+    }else{
+      datepicker.style.display='none';
+      dateinput.style.display='none';
+      begin.value=0;
+      begin.removeChild(begin.children[0]);
+      icon.setAttribute('class','fas fa-caret-right');
+      begin.insertBefore(icon,begin.children[0]);
+    }
+  }
+  var end = document.getElementById('filterDateLabelBegin')
+}
+function init(dayinit,calendarvalue,year,month,listDates){
   var datepicker=document.getElementById('datepicker-'+calendarvalue);
   var listMY= document.getElementById('selectionDate-'+calendarvalue);
+
+
   while (listMY.firstChild) {
       listMY.removeChild(listMY.firstChild);
   }
@@ -262,28 +296,22 @@ function init(dayinit,calendarvalue,year,month){
   while (table.firstChild) {
       table.removeChild(table.firstChild);
   }
-  initValMY(calendarvalue,year,month);
-  var elementValue = document.createElement('input');
-  elementValue.setAttribute('value',dayinit);
-  getVal(elementValue,calendarvalue,year,month);
+  initValMY(calendarvalue,year,month,listDates);
+  getVal(dayinit,calendarvalue,year,month);
   document.getElementById(('inputDate-'+calendarvalue)).onclick=function(){
     datepicker.style.display = "block";
     getDays(month,calendarvalue,year);
   }
+  buttonfiltre(calendarvalue);
 
 }
-function initNewFilter(divCalendarValue,year,month){
+function initNewFilter(divCalendarValue,year,month,listDates){
   var datepicker=document.getElementById('datepicker-'+divCalendarValue);
-  var listMY= document.getElementById('selectionDate-'+divCalendarValue);
-  while (listMY.firstChild) {
-      listMY.removeChild(listMY.firstChild);
-  }
 
   var table= document.getElementById('calendar-'+divCalendarValue);
   while (table.firstChild) {
       table.removeChild(table.firstChild);
   }
-  initValMY(divCalendarValue,year,month);
   document.getElementById(('inputDate-'+divCalendarValue)).onclick=function(){
     datepicker.style.display = "block";
     getDays(month,divCalendarValue,year);
