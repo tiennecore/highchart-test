@@ -8,6 +8,11 @@ DateBegin='';
 DateEnds='';
 ActivityName='';
 NameSelected=[];
+FilterSelectedHtml={
+  'activities':[],
+  'dateBegin':'',
+  'dateEnd':''
+};
 //création des objets
 function newActivity(name){
   const activity = {
@@ -207,7 +212,7 @@ function selectActivities(filter,dates,names){
   var listfindActivity=[];
   names.forEach(function(idActivity){
     var findActivity = filter.listActivity.find(function (activity){
-      return activity.name == idActivity
+      return activity.name == idActivity.value
     });
     listfindActivity.push(findActivity);
   })
@@ -241,8 +246,8 @@ function editActivityFunction (filterName){
   listbutton(ListNames,currentDiv,FilterDataSelected.name,value);
   currentDiv.lastChild.childNodes.forEach(function (activity){
     activity.onclick=function(){
-      NameSelected.push(activity.id);
-      onLoadData('data.json',filterName,NameSelected,);
+      FilterSelectedHtml.activities.push(activity.name);
+      onLoadData('data.json',filterName,FilterSelectedHtml,);
     }
   });
 }
@@ -308,7 +313,7 @@ function dateSetUp(listDates){
 }
 
 //fonction principale (main)
-function onLoadData(link,filtername,activities,callback){
+function onLoadData(link,filtername,selected,callback){
   var req = new XMLHttpRequest();
   req.overrideMimeType("application/json");
   req.open('GET', link, true);
@@ -320,10 +325,9 @@ function onLoadData(link,filtername,activities,callback){
      dateSetUp(listdates);
      FilterSelected=FilterDataSelected.name;
      ListNames = listNameactivities(FilterDataSelected,ListDates);
-     console.log(ListNames);
      Filter = newFilter(FilterDataSelected,ListDates,filtername);
-     if(activities.length!=0){
-       selectActivities(Filter,ListDates,activities);
+     if( selected.activities && !selected.activities.length ){
+       selectActivities(Filter,ListDates,selected.activities);
      }
      setGraph(Filter,ListDates);
      if (callback) callback();

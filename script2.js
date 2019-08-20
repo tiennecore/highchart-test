@@ -1,13 +1,13 @@
 
 
-function newHtmlActivity(name,filterName){
+  function newHtmlActivity(name,filterName){
 
   var elementList = document.createElement('span');
   elementList.setAttribute("id", name);
   elementList.setAttribute("class", 'filter activity value');
   elementList.onclick=function(){
-    NameSelected.push(name);
-    onLoadData('data.json',filterName,NameSelected,);
+    FilterSelectedHtml.activities.push(name);
+    onLoadData('data.json',filterName,FilterSelectedHtml,);
   };
   elementList.textContent =name;
   return elementList;

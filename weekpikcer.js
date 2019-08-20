@@ -1,4 +1,5 @@
 mos=['January','February','March','April','May','June','July','August','September','October','Novemeber','Decemeber']
+mosname=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 daylist=['Sun', 'Mon', 'Tue', 'Wed' , 'Thu', 'Fri', 'Sat']
 
 function initValMY(divCalendarValue,year,month,listDates){
@@ -157,6 +158,7 @@ function calendar(month,divCalendarValue,year){
             onLoadData('data.json',FilterSelected,ActivityName,function(){
               editActivityFunction(document.getElementById("filterForm").value);
             });
+            FilterSelectedHtml.dateBegin=mosname[month]+'-'+this.textContent+'-'+year;
           };
           element.appendChild(elementValue);
           line.appendChild(element);
