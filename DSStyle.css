@@ -183,3 +183,8 @@ th, td {
   background-color: #42a2da;
 
 }
+.item.activities.Selected{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

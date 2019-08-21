@@ -155,10 +155,11 @@ function calendar(month,divCalendarValue,year){
           element.onclick= function(){
             getVal(this.textContent,divCalendarValue,year,month);
             DatesSelected[divCalendarValue-1]=document.getElementById('inputDate-'+divCalendarValue).value;
+            FilterSelectedHtml.dates[divCalendarValue-1]=mosname[parseInt(month)]+'-'+this.textContent+'-'+year;
+            document.getElementById('filterDateLabel-'+divCalendarValue).click();
             onLoadData('data.json',FilterSelected,ActivityName,function(){
               editActivityFunction(document.getElementById("filterForm").value);
             });
-            FilterSelectedHtml.dateBegin=mosname[month]+'-'+this.textContent+'-'+year;
           };
           element.appendChild(elementValue);
           line.appendChild(element);

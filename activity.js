@@ -5,10 +5,18 @@
   var elementList = document.createElement('span');
   elementList.setAttribute("id", name);
   elementList.setAttribute("class", 'filter activity value');
-  elementList.onclick=function(){
-    FilterSelectedHtml.activities.push(name);
-    onLoadData('data.json',filterName,FilterSelectedHtml,);
-  };
+  var findvalue=FilterSelectedHtml.activities.find(function (activity){
+    return activity == name;
+  });
+  if(findvalue){
+    elementList.style.color='#368ec4';
+  }else{
+    elementList.onclick=function(){
+      FilterSelectedHtml.activities.push(name);
+      addActivitySelected();
+      onLoadData('data.json',filterName,FilterSelectedHtml,);
+    };
+  }
   elementList.textContent =name;
   return elementList;
 }
@@ -67,6 +75,7 @@ function initFormFilter(dataset){
       editActivityFunction(document.getElementById("filterForm").value);
     });
   };
+
 }
 
 function initLoad(link){
@@ -82,6 +91,9 @@ function initLoad(link){
      ListNames = listNameactivities(FilterDataSelected,datesSelected);
      var currentDiv = document.getElementById("activities");
      listbutton(ListNames,currentDiv,FilterDataSelected.name,0);
+     document.getElementById('deleteAllSelected').onclick=function(){
+       emptyAll();
+     }
      onLoadData('data.json',FilterDataSelected.name,[],);
   };
   req.send(null);
