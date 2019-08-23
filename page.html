@@ -8,6 +8,9 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
+    <script src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.min.css">
     <script src="fontawesome/js/all.js">
 
     </script>
@@ -15,6 +18,7 @@
     <script type="text/javascript" src="script.js"></script>
     <script type="text/javascript" src="activity.js"></script>
     <script type="text/javascript" src="selected.js"></script>
+    <script type="text/javascript" src="slider.js"></script>
     <link rel="stylesheet" href="DSStyle.css">
 
     <title>Study Risk Manager</title>
@@ -28,7 +32,7 @@
           <div class="headerSelectedFilters">
             <i class="fas fa-filter"></i>
           </div>
-          <div class="espaceSelectedFilters"id='selectedValues'>
+          <div class="espaceSelectedFilters">
             <div class="case presentation SelectedFilters">
               <div >
                 <i class="fas fa-caret-down"></i>
@@ -36,6 +40,9 @@
               </div>
               <i class="fas fa-trash-alt " id='deleteAllSelected'></i>
             </div>
+              <div class="case selectedItems"id='selectedValues'>
+
+              </div>
           </div>
           <div class="TitleSelectedFilters">
             <div>
@@ -44,7 +51,7 @@
             </div>
             <i class="fas fa-search "></i>
           </div>
-          <input class='searchFilter'type="text" name="" value="">
+          <input class='searchFilter' id='researchRegex' type="text" name="" value="">
           <div class="espaceFilter">
             <div class="filter activities"id='activities'>
               <div class="filter activities label" id='menuFilterLabel'>
@@ -88,6 +95,13 @@
           </div>
           <div class="row"id="graphActivitiesResult">
             <div class="graphValue"id="graph"></div>
+          </div>
+          <div class="sliderselection">
+            <div class="Labeldivslider">
+              <span class='labelslider' id='labelslider0'size="100"></span>
+              <span class='labelslider' id='labelslider1'size="100"></span>
+            </div>
+            <div id="slider-range"></div>
           </div>
         </div>
         <div class="col">

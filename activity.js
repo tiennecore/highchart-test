@@ -71,30 +71,48 @@ function initFormFilter(dataset){
     currentDiv.appendChild(optionDiv);
   });
   currentDiv.onchange=function(){
+    emptyAll();
     onLoadData('data.json',document.getElementById("filterForm").value,[],function(){
       editActivityFunction(document.getElementById("filterForm").value);
     });
   };
 
 }
+//à faire regex
+function regexresearch(){
+  var element=document.getElementById('researchRegex');
+  element.oninput=function(){
+    ListNames.forEach(function (name){
+      var constructor= new RegExp(name,'g');
+    })
+
+  }
+}
 
 function initLoad(link){
+
   var req = new XMLHttpRequest();
   req.overrideMimeType("application/json");
   req.open('GET', link, true);
   req.onload  = function() {
      var dataset = JSON.parse(req.responseText);
      initFormFilter(dataset);
+     regexresearch();
+
      var firstFilter = document.getElementById("filterForm");
      FilterDataSelected = selectFilter(dataset,(document.getElementById("filterForm")).firstChild.nextSibling.id);
      var datesSelected = listDateSelected(FilterDataSelected);
+     dateSetUp(datesSelected);
+     mainslider(DatesSelected);
      ListNames = listNameactivities(FilterDataSelected,datesSelected);
      var currentDiv = document.getElementById("activities");
      listbutton(ListNames,currentDiv,FilterDataSelected.name,0);
      document.getElementById('deleteAllSelected').onclick=function(){
        emptyAll();
      }
+
      onLoadData('data.json',FilterDataSelected.name,[],);
+
   };
   req.send(null);
 }

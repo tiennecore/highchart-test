@@ -45,6 +45,7 @@ th, td {
   flex-direction: column;
   height: auto;
   margin:5px 10px;
+
   min-width: 100px;
   min-height: 75px;
   background-color: white;
@@ -149,8 +150,9 @@ th, td {
 
 .containerValue{
   min-width: 250px;
-  margin: auto auto;
+  margin: 3% auto;
   width: 90%;
+
 }
 .graphValue{
   width: 100%;
@@ -160,7 +162,12 @@ th, td {
 
 }
 
-
+.searchFilter{
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  margin:5px 10px;
+}
 
 
 
@@ -175,16 +182,20 @@ th, td {
   background-color: #097698;
   color: #FFFFFF;
 }
-.selectedName{
-  display: table-cell;
-  min-width: 10px;
-  width: 8%;
-  height: 100%;
-  background-color: #42a2da;
 
-}
-.item.activities.Selected{
+.item.Selected{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+.Labeldivslider{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.labelslider{
+  border: 0;
+  color: #005686;
+  margin: 20px 0;
+  font-weight: bold;
 }

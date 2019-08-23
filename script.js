@@ -4,9 +4,8 @@ FilterSelected="";
 ListNames=[];
 ListDates=[];
 DatesSelected=['','']
-DateBegin='';
-DateEnds='';
-ActivityName='';
+DateBeginEnds=['','']
+DatesSlider=['','']
 NameSelected=[];
 FilterSelectedHtml={
   'activities':[],
@@ -119,22 +118,34 @@ function listofDate(list){
   return newList;
 }
 
-//selection activity selected
-function emptyAll(){
-  FilterSelectedHtml={
-    'activities':[],
-    'dates':['','']
-  };
-  ListDates=[];
-  onLoadData('data.json',FilterSelected,ActivityName,function(){
-    editActivityFunction(document.getElementById("filterForm").value);
-  });}
-function supressActivitySelected(name){
-  var newListActivities= FilterSelectedHtml.activities.filter(activity => activity!= name);
-  FilterSelectedHtml.activities=newListActivities;
-}
+//graph tri after selectionactivity
 
-// quantité de donnée
+function orderDateAfterSelectedActivity(){
+  var tmpListCount=[]
+  ListDates.forEach(date=>tmpListCount.push(false));
+  Filter.listActivity.forEach(function (activity){
+    activity.listdata.forEach(function(value,index){
+      if(value==true){
+        tmpListCount[index]=true;
+      }
+    });
+  });
+  var index=tmpListCount.length-1;
+  for (index; index >= 0; index--) {
+    if (tmpListCount[index]==false) {
+      ListDates.splice(index,1);
+    }
+  }
+  Filter.listActivity.forEach(function (activity){
+    index=tmpListCount.length-1;
+    for (index; index >= 0; index--) {
+      if (tmpListCount[index]==false) {
+        activity.listdata.splice(index,1);
+      }
+    }
+    console.log(activity);
+  });
+}
 
 
 //function applicative
@@ -251,25 +262,17 @@ function editActivityFunction (filterName){
   var currentDiv = document.getElementById("activities");
   var value =currentDiv.lastChild.value
   currentDiv.removeChild(currentDiv.lastChild);
-
   listbutton(ListNames,currentDiv,FilterDataSelected.name,value);
-  currentDiv.lastChild.childNodes.forEach(function (activity){
-    activity.onclick=function(){
-      FilterSelectedHtml.activities.push(activity.id);
-      addActivitySelected();
-      onLoadData('data.json',filterName,FilterSelectedHtml,);
-    }
-  });
 }
 function dateSetUp(listDates){
   if(ListDates.length==0){
     ListDates= trierDates(listDates);
 
     DatesSelected[0]=ListDates[0];
-    DateBegin=DatesSelected[0];
+    DateBeginEnds[0]=DatesSelected[0];
 
     DatesSelected[1]=ListDates[ListDates.length-1];
-    DateEnds=DatesSelected[1];
+    DateBeginEnds[1]=DatesSelected[1];
 
     var dateBeginGraph = DatesSelected[0].split("-");
     init(dateBeginGraph[1],1,dateBeginGraph[2],dateBeginGraph[0]-1,DatesSelected);
@@ -281,13 +284,13 @@ function dateSetUp(listDates){
   }else{
     //ListDates= trierDates(listDates);
     if(FilterSelected==FilterDataSelected.name){
-      if (stringToDate(DatesSelected[0]) < stringToDate(DateBegin) ){
-        DatesSelected[0]=DateBegin;
+      if (stringToDate(DatesSelected[0]) < stringToDate(DateBeginEnds[0]) ){
+        DatesSelected[0]=DateBeginEnds[0];
         var newDateWrite=DatesSelected[0].split('-');
         getVal(newDateWrite[1],1,newDateWrite[2],newDateWrite[0]);
       }
-      if ( stringToDate(DatesSelected[1]) > stringToDate(DateEnds) ){
-        DatesSelected[1]=DateEnds;
+      if ( stringToDate(DatesSelected[1]) > stringToDate(DateBeginEnds[1]) ){
+        DatesSelected[1]=DateBeginEnds[1];
         var newDateWrite=DatesSelected[1].split('-');
         getVal(newDateWrite[1],1,newDateWrite[2],newDateWrite[0]);
       }
@@ -310,16 +313,21 @@ function dateSetUp(listDates){
       ListDates= trierDates(listDates);
 
       DatesSelected[0]=ListDates[0];
-      DateBegin=DatesSelected[0];
+      DateBeginEnds[0]=DatesSelected[0];
       var dateBeginGraph = DatesSelected[0].split("-");
       init(dateBeginGraph[1],1,dateBeginGraph[2],dateBeginGraph[0],DatesSelected);
 
       DatesSelected[1]=ListDates[ListDates.length-1];
-      DateEnds=DatesSelected[1];
+      DateBeginEnds[1]=DatesSelected[1];
       var dateEndsGraph = DatesSelected[1].split("-");
       init(dateEndsGraph[1],2,dateEndsGraph[2],dateEndsGraph[0],DatesSelected);
     }
   }
+  DatesSelected.forEach(function(date,index){
+    var labeldate=document.getElementById('labelslider'+index);
+    labeldate.textContent=dateDateToDateMosName(date);
+  });
+
 }
 
 //fonction principale (main)
@@ -336,12 +344,14 @@ function onLoadData(link,filtername,selected,callback){
      FilterSelected=FilterDataSelected.name;
      ListNames = listNameactivities(FilterDataSelected,ListDates);
      Filter = newFilter(FilterDataSelected,ListDates,filtername);
-     if( selected.activities ){
+     if( selected.activities && selected.activities.length>0){
+       addActivityToFilter();
+       orderDateAfterSelectedActivity();
        editActivityFunction(filtername);
      }
+
      setGraph(Filter,ListDates);
      if (callback) callback();
-     console.log(FilterSelectedHtml);
   };
   req.send();
 }

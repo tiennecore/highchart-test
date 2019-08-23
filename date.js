@@ -2,6 +2,23 @@ mos=['January','February','March','April','May','June','July','August','Septembe
 mosname=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 daylist=['Sun', 'Mon', 'Tue', 'Wed' , 'Thu', 'Fri', 'Sat']
 
+function dateMosNameToDate(date){
+  var dateValue=date.split("-");
+  var indexValue = mosname.findIndex(function(mois){
+  return (mois == dateValue[0])
+  });
+  indexValue++;
+
+  if (indexValue<10){
+    indexValue='0'+indexValue;
+  }
+  return indexValue+'-'+dateValue[1]+'-'+dateValue[2]
+}
+function dateDateToDateMosName(date){
+  var newDate=date.split('-');
+  return mosname[parseInt(newDate[0])]+'-'+newDate[1]+'-'+newDate[2];
+}
+
 function initValMY(divCalendarValue,year,month,listDates){
   if(month<10 && typeof month == "string"){
     var monthValue=month.split('0');
@@ -129,6 +146,7 @@ function weekCalendar(divCalendarValue){
   currentDiv.appendChild(headTable);
 }
 function calendar(month,divCalendarValue,year){
+  month--;
   var currentDiv =  document.getElementById('calendar-'+divCalendarValue);
   var bodyTable = document.createElement('tbody');
   var firstDay = new Date(year,month, 1);
@@ -145,6 +163,7 @@ function calendar(month,divCalendarValue,year){
           var element = document.createElement('td');
           var elementValue = document.createElement('span');
           element.setAttribute('class','calendarBlockDay ');
+          element.setAttribute('id',new Date(year+'.'+month+'.'+dayCount));
           elementValue.textContent=dayCount;
           elementValue.style.font='12px/20px arial';
           elementValue.style.textAlign='center';
@@ -155,11 +174,16 @@ function calendar(month,divCalendarValue,year){
           element.onclick= function(){
             getVal(this.textContent,divCalendarValue,year,month);
             DatesSelected[divCalendarValue-1]=document.getElementById('inputDate-'+divCalendarValue).value;
-            FilterSelectedHtml.dates[divCalendarValue-1]=mosname[parseInt(month)]+'-'+this.textContent+'-'+year;
             document.getElementById('filterDateLabel-'+divCalendarValue).click();
-            onLoadData('data.json',FilterSelected,ActivityName,function(){
+            onLoadData('data.json',FilterSelected,FilterSelectedHtml,function(){
               editActivityFunction(document.getElementById("filterForm").value);
             });
+            if (DatesSelected[divCalendarValue-1]!=DateBeginEnds[divCalendarValue-1]){
+              slideReplaceValues(DatesSelected);
+              var validDate = DatesSelected[divCalendarValue-1].split('-');
+              FilterSelectedHtml.dates[divCalendarValue-1]=mosname[parseInt(validDate[0])-1]+'-'+validDate[1]+'-'+validDate[2];
+              addDateSelected(FilterSelectedHtml.dates,divCalendarValue-1);
+            }
           };
           element.appendChild(elementValue);
           line.appendChild(element);
@@ -199,7 +223,8 @@ function getVal(e,divCalendarValue,year,monthValue){
    var datepicker=document.getElementById('datepicker-'+divCalendarValue);
    datepicker.style.display = 'none';
    if (day<10){day="0"+day}
-   if ((monthValue + 1)<10){monthValue='0'+(monthValue+1)}
+   monthValue=parseInt(monthValue)+1;
+   if (monthValue<10) monthValue='0'+monthValue;
    document.getElementById('inputDate-'+divCalendarValue).value = monthValue+"-"+day+"-"+year ;
 }
 
