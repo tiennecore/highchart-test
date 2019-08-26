@@ -15,16 +15,11 @@ function dateMosNameToDate(date){
   return indexValue+'-'+dateValue[1]+'-'+dateValue[2]
 }
 function dateDateToDateMosName(date){
-  var newDate=date.split('-');
-  return mosname[parseInt(newDate[0])]+'-'+newDate[1]+'-'+newDate[2];
+
+  return mosname[parseInt(date.getMonth())]+'-'+date.getDate()+'-'+Date.getFullYear();
 }
 
-function initValMY(divCalendarValue,year,month,listDates){
-  if(month<10 && typeof month == "string"){
-    var monthValue=month.split('0');
-  }else {
-    var monthValue=['',month]
-  }
+function initValMY(divCalendarValue,date,listDates){
 
   var tableMY=document.createElement('calendrierPeriodeSelection-'+divCalendarValue);
   tableMY.setAttribute('class','calendrierPeriodeSelection');
@@ -47,7 +42,7 @@ function initValMY(divCalendarValue,year,month,listDates){
   buttonLastMonth.setAttribute('id','buttonLastMonth-'+divCalendarValue);
   buttonLastMonth.src='chevron-left.svg';
   buttonLastMonth.onclick=function(){
-    lastMonth(divCalendarValue,monthValue[1],year);
+    lastMonth(divCalendarValue,date.getMonth(),date.getFullYear());
   }
   element1.appendChild(buttonLastMonth);
   line.appendChild(element1);
@@ -67,7 +62,7 @@ function initValMY(divCalendarValue,year,month,listDates){
     optionMonth.label=mois;
     monthElement.appendChild(optionMonth);
   });
-  monthElement.selectedIndex=monthValue[1];
+  monthElement.selectedIndex=date.getMonth();
   monthElement.onchange=function (){
     var newYearValue=document.getElementById('yearValue-'+divCalendarValue);
     thisMonth(divCalendarValue,this.selectedIndex,newYearValue);
@@ -106,7 +101,7 @@ function initValMY(divCalendarValue,year,month,listDates){
   buttonNextMonth.setAttribute('id','buttonNextMonth-'+divCalendarValue);
   buttonNextMonth.src='chevron-right.svg';
   buttonNextMonth.onclick=function(){
-    nextMonth(divCalendarValue,monthValue[1],year);
+    nextMonth(divCalendarValue,date.getMonth(),date.getFullYear());
   }
   element4.appendChild(buttonNextMonth);
   line.appendChild(element4);
@@ -118,8 +113,7 @@ function initValMY(divCalendarValue,year,month,listDates){
 function initNbYear(datesLimits){
   var years=[];
   datesLimits.forEach(function(date){
-    var tmpdatelimit=date.split('-');
-    years.push(tmpdatelimit[2]);
+    years.push(date.getFullYear());
   });
   var listYears=[]
   for(years[0];years[0]<=years[1];years[0]++){
@@ -223,9 +217,9 @@ function getVal(e,divCalendarValue,year,monthValue){
    var datepicker=document.getElementById('datepicker-'+divCalendarValue);
    datepicker.style.display = 'none';
    if (day<10){day="0"+day}
-   monthValue=parseInt(monthValue)+1;
+   monthValue=parseInt(monthValue);
    if (monthValue<10) monthValue='0'+monthValue;
-   document.getElementById('inputDate-'+divCalendarValue).value = monthValue+"-"+day+"-"+year ;
+   document.getElementById('inputDate-'+divCalendarValue).value = mosname[monthValue]+"-"+day+"-"+year ;
 }
 
 function nextMonth(divCalendar,monthValue,year){
@@ -311,7 +305,7 @@ function buttonfiltre(calendarvalue){
   }
   var end = document.getElementById('filterDateLabelBegin')
 }
-function init(dayinit,calendarvalue,year,month,listDates){
+function init(date,calendarvalue,listDates){
   var datepicker=document.getElementById('datepicker-'+calendarvalue);
   var listMY= document.getElementById('selectionDate-'+calendarvalue);
 
@@ -324,11 +318,11 @@ function init(dayinit,calendarvalue,year,month,listDates){
   while (table.firstChild) {
       table.removeChild(table.firstChild);
   }
-  initValMY(calendarvalue,year,month,listDates);
-  getVal(dayinit,calendarvalue,year,month);
+  initValMY(calendarvalue,date,listDates);
+  getVal(date.getDate(),calendarvalue,date.getFullYear(),date.getMonth());
   document.getElementById(('inputDate-'+calendarvalue)).onclick=function(){
     datepicker.style.display = "block";
-    getDays(month,calendarvalue,year);
+    getDays(date.getMonth(),calendarvalue,date.getFullYear());
   }
   buttonfiltre(calendarvalue);
 

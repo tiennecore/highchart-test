@@ -5,40 +5,40 @@
       "name":"Task failed",
       "data":[
         {
-          "date":"03-23-2019",
+          "date":"03.23.2019",
           "activity":"pHb"
         },{
-          "date":"03-19-2019",
+          "date":"03.19.2019",
           "activity":"Percentage degradation"
         },{
-          "date":"03-19-2019",
+          "date":"03.19.2019",
           "activity":"CEXt"
         },{
-          "date":"03-23-2019",
+          "date":"03.23.2019",
           "activity":"Percentage degradationf"
         },{
-          "date":"03-23-2019",
+          "date":"03.23.2019",
           "activity":"Percentage degradation"
         },{
-          "date":"03-27-2019",
+          "date":"03.27.2019",
           "activity":"Percentage degradations"
         },{
-          "date":"03-30-2019",
+          "date":"03.30.2019",
           "activity":"CEXv"
         },{
-          "date":"03-30-2019",
+          "date":"03.30.2019",
           "activity":"pHr"
         },{
-          "date":"03-31-2019",
+          "date":"03.31.2019",
           "activity":"CEXz"
         },{
-          "date":"03-30-2020",
+          "date":"03.30.2020",
           "activity":"BioAssayy"
         },{
-          "date":"03-30-2020",
+          "date":"03.30.2020",
           "activity":"Puritys"
         },{
-          "date":"06-30-2022",
+          "date":"06.30.2022",
           "activity":"BioAssayi"
         }
       ]
@@ -46,43 +46,43 @@
       "name":"Late task",
       "data":[
         {
-          "date":"04-19-2019",
+          "date":"04.19.2019",
           "activity":"CEX"
         },{
-          "date":"07-19-2019",
+          "date":"07.19.2019",
           "activity":"Percentage degradation"
         },{
-          "date":"07-23-2019",
+          "date":"07.23.2019",
           "activity":"pH"
         },{
-          "date":"07-23-2019",
+          "date":"07.23.2019",
           "activity":"Purity"
         },{
-          "date":"08-23-2019",
+          "date":"08.23.2019",
           "activity":"Percentage degradation"
         },{
-          "date":"08-27-2019",
+          "date":"08.27.2019",
           "activity":"BioAssay"
         },{
-          "date":"08-30-2019",
+          "date":"08.30.2019",
           "activity":"pH"
         },{
-          "date":"11-30-2019",
+          "date":"11.30.2019",
           "activity":"CEX"
         },{
-          "date":"12-31-2019",
+          "date":"12.31.2019",
           "activity":"CEX"
         },{
-          "date":"03-30-2020",
+          "date":"03.30.2020",
           "activity":"BioAssay"
         },{
-          "date":"03-15-2020",
+          "date":"03.15.2020",
           "activity":"Purity"
         },{
-          "date":"10-31-2020",
+          "date":"10.31.2020",
           "activity":"pH"
         },{
-          "date":"12-31-2020",
+          "date":"12.31.2020",
           "activity":"CEX"
         }
       ]

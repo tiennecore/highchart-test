@@ -11,6 +11,7 @@ FilterSelectedHtml={
   'activities':[],
   'dates':['','']
 };
+
 //création des objets
 function newActivity(name){
   const activity = {
@@ -26,7 +27,7 @@ function listDateSelected( datajson){
   var dates=[];
   datajson.data.forEach(function(element){
     if (!dates.includes(element.date)){
-      dates.push((element.date));
+      dates.push(element.date);
     }
   });
   return dates;
@@ -88,35 +89,40 @@ function dataToConf(filter){
 
 //date tri
 function stringToDate(value){
-  var dateList = value.split("-");
+  var dateList = value.split(".");
   var date=new Date(dateList[2],(parseInt(dateList[0])-1),dateList[1]);
   return date;
 }
+
 function dateToString(date){
-  var dayValue=date.getDate();
-  var monthValue=date.getMonth()+1;
-  if(dayValue<10)dayValue="0"+dayValue;
-  if(monthValue<10)monthValue="0"+monthValue;
-  return monthValue+"-"+dayValue+"-"+date.getFullYear();
+
+  return mosname[date.getMonth()]+"-"+date.getDate()+"-"+date.getFullYear();
 }
+
 function trierDates(list){
   var newList=listofDate(list);
   var finalList=[];
-  newList.forEach(function (stringDate){
-    finalList.push(dateToString(stringDate));
+  newList.forEach(function (date){
+    finalList.push(date);
   });
   return finalList;
 }
 function listofDate(list){
   var newList=[];
   list.forEach(function (stringDate){
-    newList.push(stringToDate(stringDate));
+    if(typeof stringDate == 'string'){
+      newList.push(stringToDate(stringDate));
+    }
+    else{
+      newList.push(stringDate);
+    }
   });
   newList.sort(function(a, b) {
     return a - b;
   });
   return newList;
 }
+
 
 //graph tri after selectionactivity
 
@@ -274,58 +280,49 @@ function dateSetUp(listDates){
     DatesSelected[1]=ListDates[ListDates.length-1];
     DateBeginEnds[1]=DatesSelected[1];
 
-    var dateBeginGraph = DatesSelected[0].split("-");
-    init(dateBeginGraph[1],1,dateBeginGraph[2],dateBeginGraph[0]-1,DatesSelected);
+    DateBeginEnds.forEach(function(date,index){
+      init(date,index+1,DatesSelected);
+    });
 
 
-    var dateEndsGraph = DatesSelected[1].split("-");
-    init(dateEndsGraph[1],2,dateEndsGraph[2],dateEndsGraph[0]-1,DatesSelected);
 
   }else{
     //ListDates= trierDates(listDates);
     if(FilterSelected==FilterDataSelected.name){
-      if (stringToDate(DatesSelected[0]) < stringToDate(DateBeginEnds[0]) ){
+      if ((DatesSelected[0]) < (DateBeginEnds[0]) ){
         DatesSelected[0]=DateBeginEnds[0];
-        var newDateWrite=DatesSelected[0].split('-');
-        getVal(newDateWrite[1],1,newDateWrite[2],newDateWrite[0]);
+        getVal(DatesSelected[0].getDate(),1,DatesSelected[0].getFullYear(),DatesSelected[0].getMonth());
       }
-      if ( stringToDate(DatesSelected[1]) > stringToDate(DateBeginEnds[1]) ){
+      if ( (DatesSelected[1]) > (DateBeginEnds[1]) ){
         DatesSelected[1]=DateBeginEnds[1];
-        var newDateWrite=DatesSelected[1].split('-');
-        getVal(newDateWrite[1],1,newDateWrite[2],newDateWrite[0]);
+        getVal(DatesSelected[1].getDate(),2,DatesSelected[1].getFullYear(),DatesSelected[1].getMonth());
       }
-      var dateBeginGraph= stringToDate(DatesSelected[0]);
-      var dateEndsGraph= stringToDate(DatesSelected[1]);
       var listTmpDates= listofDate(listDates);
       var listDatesGraph=[];
       listTmpDates.forEach(function ( date){
-        if( date >= dateBeginGraph && date <= dateEndsGraph){
-          listDatesGraph.push(dateToString(date));
+        if( date >= DatesSelected[0] && date <= DatesSelected[1]){
+          listDatesGraph.push(date);
         }
       });
       ListDates= trierDates(listDatesGraph);
-      var dateBeginSplit = DatesSelected[0].split("-");
-      initNewFilter(1,dateBeginSplit[2],dateBeginSplit[0],DatesSelected);
+      initNewFilter(1,DatesSelected[0].getFullYear(),DatesSelected[0].getMonth(),DatesSelected);
 
-      var dateEndsSplit = DatesSelected[1].split("-");
-      initNewFilter(2,dateEndsSplit[2],dateEndsSplit[0],DatesSelected);
+      initNewFilter(2,DatesSelected[1].getFullYear(),DatesSelected[1].getMonth(),DatesSelected);
     }else {
       ListDates= trierDates(listDates);
 
       DatesSelected[0]=ListDates[0];
       DateBeginEnds[0]=DatesSelected[0];
-      var dateBeginGraph = DatesSelected[0].split("-");
-      init(dateBeginGraph[1],1,dateBeginGraph[2],dateBeginGraph[0],DatesSelected);
+      getVal(DatesSelected[0].getDate(),1,DatesSelected[0].getFullYear(),DatesSelected[0].getMonth());
 
       DatesSelected[1]=ListDates[ListDates.length-1];
       DateBeginEnds[1]=DatesSelected[1];
-      var dateEndsGraph = DatesSelected[1].split("-");
-      init(dateEndsGraph[1],2,dateEndsGraph[2],dateEndsGraph[0],DatesSelected);
+      getVal(DatesSelected[1].getDate(),2,DatesSelected[1].getFullYear(),DatesSelected[1].getMonth());
     }
   }
   DatesSelected.forEach(function(date,index){
     var labeldate=document.getElementById('labelslider'+index);
-    labeldate.textContent=dateDateToDateMosName(date);
+    labeldate.textContent=dateToString(date);
   });
 
 }

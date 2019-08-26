@@ -1,37 +1,42 @@
 function mainslider(dateList){
   dateList.forEach(function (date,index){
-    var tmpDate = date.split('-');
-    DatesSlider[index]=tmpDate[2]+'.'+tmpDate[0]+'.'+tmpDate[1];
-    sliderMoove(DatesSlider);
+    var newDate = date;
+    if(index==0){
+      newDate.setDate(newDate.getDate()-1);
+      DatesSlider[index]=newDate;
+    }else{
+      newDate.setDate(newDate.getDate()+1);
+      DatesSlider[index]=newDate;
+    }
   });
+  sliderMoove(DatesSlider);
 }
 
 function slideReplaceValues(list){
   list.forEach(function (date,index){
-    var tmpDate = date.split('-');
-    DatesSlider[index]=tmpDate[2]+'.'+tmpDate[0]+'.'+tmpDate[1];
+
+
   });
   $( "#slider-range" ).slider({
-    values:[new Date(DatesSlider[0]).getTime() / 1000,new Date(DatesSlider[1]).getTime() / 1000]
+    values:[DatesSlider[0].getTime() / 1000,DatesSlider[1].getTime() / 1000]
   });
 }
 
 function sliderMoove(list) {
   $( "#slider-range" ).slider({
     range: true,
-    min: new Date(list[0]).getTime() / 1000,
-    max: new Date(list[1]).getTime() / 1000,
+    min: list[0].getTime() / 1000,
+    max: list[1].getTime() / 1000,
     step: 86400,
-    values: [ new Date(list[0]).getTime() / 1000, new Date(list[1]).getTime() / 1000 ],
+    values: [ list[0].getTime() / 1000, list[1].getTime() / 1000 ],
     slide: function( event, ui ) {
       list.forEach(function (date,index){
-        date=new Date(ui.values[index]*1000);
-        getVal(date.getDate(),index+1,date.getFullYear(),date.getMonth());
-        DatesSelected[index]=document.getElementById('inputDate-'+(index+1)).value;
+        var dateselected=new Date(ui.values[index]*1000);
+        getVal(dateselected.getDate(),index+1,dateselected.getFullYear(),dateselected.getMonth());
+        date=dateselected;
         document.getElementById('filterDateLabel-'+(index+1)).click();
-        if (DatesSelected[index]!=DateBeginEnds[index]){
-          var validDate = DatesSelected[index].split('-');
-          FilterSelectedHtml.dates[index]=mosname[parseInt(validDate[0])-1]+'-'+validDate[1]+'-'+validDate[2];
+        if (date!=DateBeginEnds[index]){
+          FilterSelectedHtml.dates[index]=dateToString(date);
           addDateSelected(FilterSelectedHtml.dates,index);
         }
       });
