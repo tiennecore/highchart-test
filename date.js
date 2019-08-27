@@ -217,8 +217,8 @@ function getVal(e,divCalendarValue,year,monthValue){
    var datepicker=document.getElementById('datepicker-'+divCalendarValue);
    datepicker.style.display = 'none';
    if (day<10){day="0"+day}
-   monthValue=parseInt(monthValue);
-   if (monthValue<10) monthValue='0'+monthValue;
+
+   if (!typeof monthValue=='int') {monthValue=parseInt(monthValue)}
    document.getElementById('inputDate-'+divCalendarValue).value = mosname[monthValue]+"-"+day+"-"+year ;
 }
 

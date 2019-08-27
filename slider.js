@@ -18,7 +18,7 @@ function slideReplaceValues(list){
 
   });
   $( "#slider-range" ).slider({
-    values:[DatesSlider[0].getTime() / 1000,DatesSlider[1].getTime() / 1000]
+    values:[list[0].getTime() / 1000,list[1].getTime() / 1000]
   });
 }
 
@@ -35,10 +35,10 @@ function sliderMoove(list) {
         getVal(dateselected.getDate(),index+1,dateselected.getFullYear(),dateselected.getMonth());
         date=dateselected;
         document.getElementById('filterDateLabel-'+(index+1)).click();
-        if (date!=DateBeginEnds[index]){
-          FilterSelectedHtml.dates[index]=dateToString(date);
-          addDateSelected(FilterSelectedHtml.dates,index);
-        }
+        FilterSelectedHtml.dates[index]=dateToString(date);
+        addDateSelected(FilterSelectedHtml.dates,index);
+        var labeldate=document.getElementById('labelslider'+index);
+        labeldate.textContent=dateToString(date);
       });
       onLoadData('data.json',FilterSelected,FilterSelectedHtml,);
       $( "#amount" ).val( (new Date(ui.values[ 0 ] *1000).toDateString() ) + " - " + (new Date(ui.values[ 1 ] *1000)).toDateString() );

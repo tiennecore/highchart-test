@@ -32,35 +32,29 @@ function listDateSelected( datajson){
   });
   return dates;
 }
-function listNameactivities( datajson, dates){
+function listNameactivities( datajson, listdate){
   var listActivity=[]
   datajson.data.forEach(function(e0){
-    if (!listActivity.includes(e0.activity) && dates.includes(e0.date)){
+    if (!listActivity.includes(e0.activity) && ! listdate.find(value => value == stringToDate(e0.date))){
       listActivity.push(e0.activity);
     }
   })
   return listActivity;
 }
-function nbOfActivities(datajson, dates){
-  var int = listNameactivities(datajson, dates);
-  return int.length;
-}
+
 function newFilter( datajson,dates,name){
-  const filter = {
+  var filter = {
     name:"",
     listActivity:[]
   };
   filter.name = name;
-  var nbActivity = nbOfActivities(datajson, dates);
-  var i = 0;
-  var listNameactivity = listNameactivities( datajson, dates);
-  for (;i<nbActivity;i++){
-    filter.listActivity.push(newActivity(listNameactivity[i]));
-  }
+  ListNames.forEach(function(value){
+    filter.listActivity.push(newActivity(value));
+  });
   dates.forEach(function(e0){
     //console.log("jour de test :"+e0);
     datajson.data.forEach(function(e1){
-      if(e0==e1.date){
+      if(dateToString(e0)==dateToString(stringToDate(e1.date)) ){
         var findactivity = filter.listActivity.find(function (activity){
           return activity.name == e1.activity
         });
@@ -87,13 +81,12 @@ function dataToConf(filter){
   return listconf;
 }
 
-//date tri
+//date tri & affichage
 function stringToDate(value){
   var dateList = value.split(".");
   var date=new Date(dateList[2],(parseInt(dateList[0])-1),dateList[1]);
   return date;
 }
-
 function dateToString(date){
 
   return mosname[date.getMonth()]+"-"+date.getDate()+"-"+date.getFullYear();
@@ -156,6 +149,10 @@ function orderDateAfterSelectedActivity(){
 
 //function applicative
 function setGraph(filter,dates){
+  var frontDates=[]
+  dates.forEach(function (date){
+    frontDates.push(dateToString(date));
+  });
   var Conf= dataToConf(filter);
   var myChart = Highcharts.chart('graph', {
     chart: {
@@ -165,7 +162,7 @@ function setGraph(filter,dates){
       text: filter.name
     },
     xAxis: {
-      categories: dates
+      categories: frontDates
     },
     yAxis: {
       min: 0,
@@ -320,11 +317,6 @@ function dateSetUp(listDates){
       getVal(DatesSelected[1].getDate(),2,DatesSelected[1].getFullYear(),DatesSelected[1].getMonth());
     }
   }
-  DatesSelected.forEach(function(date,index){
-    var labeldate=document.getElementById('labelslider'+index);
-    labeldate.textContent=dateToString(date);
-  });
-
 }
 
 //fonction principale (main)

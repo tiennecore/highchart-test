@@ -101,12 +101,9 @@ function initLoad(link){
 
      var firstFilter = document.getElementById("filterForm");
      FilterDataSelected = selectFilter(dataset,(document.getElementById("filterForm")).firstChild.nextSibling.id);
-     var datesSelected = listDateSelected(FilterDataSelected);
-     dateSetUp(datesSelected);
+     var listdates = listDateSelected(FilterDataSelected);
+     dateSetUp(listdates);
      mainslider(DatesSelected);
-     ListNames = listNameactivities(FilterDataSelected,datesSelected);
-     var currentDiv = document.getElementById("activities");
-     listbutton(ListNames,currentDiv,FilterDataSelected.name,0);
      document.getElementById('deleteAllSelected').onclick=function(){
        emptyAll();
      }
