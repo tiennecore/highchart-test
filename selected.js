@@ -85,7 +85,7 @@ function addDateSelected(list,indexlist){
       getVal(newDateWrite[1],1,newDateWrite[2],newDateWrite[0]);
       FilterSelectedHtml.dates[indexlist]='';
       onLoadData('data.json',FilterSelected,FilterSelectedHtml,);
-      slideReplaceValues(DatesSelected);
+      slideReplaceValues();
       var divselec=document.getElementById('Calendar'+indexlist);
       divselec.parentNode.removeChild(divselec);
 

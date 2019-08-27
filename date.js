@@ -20,7 +20,6 @@ function dateDateToDateMosName(date){
 }
 
 function initValMY(divCalendarValue,date,listDates){
-
   var tableMY=document.createElement('calendrierPeriodeSelection-'+divCalendarValue);
   tableMY.setAttribute('class','calendrierPeriodeSelection');
   tableMY.cellspacing="0";
@@ -140,7 +139,6 @@ function weekCalendar(divCalendarValue){
   currentDiv.appendChild(headTable);
 }
 function calendar(month,divCalendarValue,year){
-  month--;
   var currentDiv =  document.getElementById('calendar-'+divCalendarValue);
   var bodyTable = document.createElement('tbody');
   var firstDay = new Date(year,month, 1);
@@ -167,17 +165,15 @@ function calendar(month,divCalendarValue,year){
           element.style.borderColor='#C0C0C0';
           element.onclick= function(){
             getVal(this.textContent,divCalendarValue,year,month);
-            DatesSelected[divCalendarValue-1]=document.getElementById('inputDate-'+divCalendarValue).value;
+            DatesSelected[divCalendarValue-1]=htmlToDate(document.getElementById('inputDate-'+divCalendarValue).value);
             document.getElementById('filterDateLabel-'+divCalendarValue).click();
             onLoadData('data.json',FilterSelected,FilterSelectedHtml,function(){
               editActivityFunction(document.getElementById("filterForm").value);
             });
-            if (DatesSelected[divCalendarValue-1]!=DateBeginEnds[divCalendarValue-1]){
-              slideReplaceValues(DatesSelected);
-              var validDate = DatesSelected[divCalendarValue-1].split('-');
-              FilterSelectedHtml.dates[divCalendarValue-1]=mosname[parseInt(validDate[0])-1]+'-'+validDate[1]+'-'+validDate[2];
-              addDateSelected(FilterSelectedHtml.dates,divCalendarValue-1);
-            }
+            DatesSlider[divCalendarValue-1]=DatesSelected[divCalendarValue-1];
+            slideReplaceValues();
+            FilterSelectedHtml.dates[divCalendarValue-1]=mosname[DatesSlider[divCalendarValue-1].getMonth()]+'-'+DatesSlider[divCalendarValue-1].getDate()+'-'+DatesSlider[divCalendarValue-1].getFullYear();
+            addDateSelected(FilterSelectedHtml.dates,divCalendarValue-1);
           };
           element.appendChild(elementValue);
           line.appendChild(element);

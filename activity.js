@@ -74,6 +74,12 @@ function initFormFilter(dataset){
     emptyAll();
     onLoadData('data.json',document.getElementById("filterForm").value,[],function(){
       editActivityFunction(document.getElementById("filterForm").value);
+      mainslider(DatesSelected);
+      DatesSlider.forEach(function(value,index){
+        var labeldate=document.getElementById('labelslider'+index);
+        labeldate.textContent=dateToString(value);
+        init(DateBeginEnds[index],index+1,DatesSelected);
+      });
     });
   };
 
@@ -104,12 +110,15 @@ function initLoad(link){
      var listdates = listDateSelected(FilterDataSelected);
      dateSetUp(listdates);
      mainslider(DatesSelected);
+     DatesSlider.forEach(function(value,index){
+       var labeldate=document.getElementById('labelslider'+index);
+       labeldate.textContent=dateToString(value);
+     });
      document.getElementById('deleteAllSelected').onclick=function(){
        emptyAll();
      }
 
      onLoadData('data.json',FilterDataSelected.name,[],);
-
   };
   req.send(null);
 }

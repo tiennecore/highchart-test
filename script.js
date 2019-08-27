@@ -91,6 +91,12 @@ function dateToString(date){
 
   return mosname[date.getMonth()]+"-"+date.getDate()+"-"+date.getFullYear();
 }
+function htmlToDate(value){
+  var dateList = value.split("-");
+  var month = mosname.findIndex(mois => mois == dateList[0]);
+  var date=new Date(dateList[2],month,dateList[1]);
+  return date;
+}
 
 function trierDates(list){
   var newList=listofDate(list);
@@ -338,7 +344,6 @@ function onLoadData(link,filtername,selected,callback){
        orderDateAfterSelectedActivity();
        editActivityFunction(filtername);
      }
-
      setGraph(Filter,ListDates);
      if (callback) callback();
   };

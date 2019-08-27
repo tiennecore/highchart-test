@@ -12,13 +12,13 @@ function mainslider(dateList){
   sliderMoove(DatesSlider);
 }
 
-function slideReplaceValues(list){
-  list.forEach(function (date,index){
-
-
+function slideReplaceValues(){
+  DatesSlider.forEach(function(value,index){
+    var labeldate=document.getElementById('labelslider'+index);
+    labeldate.textContent=dateToString(date);
   });
   $( "#slider-range" ).slider({
-    values:[list[0].getTime() / 1000,list[1].getTime() / 1000]
+    values:[DatesSlider[0].getTime() / 1000,DatesSlider[1].getTime() / 1000]
   });
 }
 
@@ -31,16 +31,19 @@ function sliderMoove(list) {
     values: [ list[0].getTime() / 1000, list[1].getTime() / 1000 ],
     slide: function( event, ui ) {
       list.forEach(function (date,index){
-        var dateselected=new Date(ui.values[index]*1000);
-        getVal(dateselected.getDate(),index+1,dateselected.getFullYear(),dateselected.getMonth());
-        date=dateselected;
+        DatesSelected[index]=new Date(ui.values[index]*1000);
+        getVal(DatesSelected[index].getDate(),index+1,DatesSelected[index].getFullYear(),DatesSelected[index].getMonth());
+        date=DatesSelected[index];
         document.getElementById('filterDateLabel-'+(index+1)).click();
         FilterSelectedHtml.dates[index]=dateToString(date);
         addDateSelected(FilterSelectedHtml.dates,index);
         var labeldate=document.getElementById('labelslider'+index);
         labeldate.textContent=dateToString(date);
+        init(date,index+1,DatesSelected);
       });
-      onLoadData('data.json',FilterSelected,FilterSelectedHtml,);
+      onLoadData('data.json',FilterSelected,FilterSelectedHtml,function(){
+        editActivityFunction(document.getElementById("filterForm").value);
+      });
       $( "#amount" ).val( (new Date(ui.values[ 0 ] *1000).toDateString() ) + " - " + (new Date(ui.values[ 1 ] *1000)).toDateString() );
     }
   });
