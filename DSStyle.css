@@ -193,6 +193,10 @@ th, td {
   flex-direction: row;
   justify-content: space-between;
 }
+.activtyinfodiv{
+  display: none;
+  flex-direction: column;
+}
 .labelslider{
   border: 0;
   color: #005686;

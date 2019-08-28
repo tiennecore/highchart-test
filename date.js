@@ -33,19 +33,6 @@ function initValMY(divCalendarValue,date,listDates){
   var currentDiv =document.getElementById('selectionDate-'+divCalendarValue);
   currentDiv.style.height='30px';
 
-  //button lastmonth
-  var element1= document.createElement('td');
-  element1.setAttribute('valign','middle');
-  element1.setAttribute('align','center');
-  var buttonLastMonth = document.createElement('img');
-  buttonLastMonth.setAttribute('id','buttonLastMonth-'+divCalendarValue);
-  buttonLastMonth.src='chevron-left.svg';
-  buttonLastMonth.onclick=function(){
-    lastMonth(divCalendarValue,date.getMonth(),date.getFullYear());
-  }
-  element1.appendChild(buttonLastMonth);
-  line.appendChild(element1);
-
   // select monthValue
   var element2= document.createElement('td');
   element2.setAttribute('valign','middle');
@@ -92,18 +79,7 @@ function initValMY(divCalendarValue,date,listDates){
   element3.appendChild(yearElement);
   line.appendChild(element3);
 
-  //button nextmonth
-  var element4= document.createElement('td');
-  element4.setAttribute('valign','middle');
-  element4.setAttribute('align','center');
-  var buttonNextMonth = document.createElement('img');
-  buttonNextMonth.setAttribute('id','buttonNextMonth-'+divCalendarValue);
-  buttonNextMonth.src='chevron-right.svg';
-  buttonNextMonth.onclick=function(){
-    nextMonth(divCalendarValue,date.getMonth(),date.getFullYear());
-  }
-  element4.appendChild(buttonNextMonth);
-  line.appendChild(element4);
+
 
   tbody.appendChild(line);
   tableMY.appendChild(tbody);

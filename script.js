@@ -11,16 +11,20 @@ FilterSelectedHtml={
   'activities':[],
   'dates':['','']
 };
-
+TaskState=[]
+ActivityState=['draft', 'submitted', 'review in progress', 'reviewed', 'approval in progress', 'approved', 'withdrawn', 'superseded'  ]
+SampleState=['planned', 'collected', 'available', 'readyForDispose', 'disposed','collectionFailed']
+AllData=[];
 //création des objets
 function newActivity(name){
   const activity = {
-    name:"",
-    description:"",
+    name:name,
     countTmp:0,
-    listdata:[]
-  }; //Object.create(activityPropriety);
-  activity.name = name;
+    listdata:[],
+    sampleUsed:0,
+    localization:'',
+    assignee:''
+  };
   return activity;
 }
 function listDateSelected( datajson){
@@ -249,23 +253,87 @@ function selectActivities(filter,dates,names){
   console.log(listfindActivity);
 }
 function createText(text){
-  var element = document.createElement("p");
-  var node = document.createTextNode(text);
-  element.appendChild(node);
+  var element = document.createElement("span");
+  element.textContent = text;
   return element;
 }
 function resultOnClickGraph(date,nbTask,totalTask,activityName,filterName){
+  var activityinfo = AllData.Activities.find(element => element.name == activityName);
+  if(!activityinfo){
+    activityinfo={
+      name:"",
+      version:"",
+      LifecycleStatus:'',
+      Cost:"",
+      EntryParameters:"",
+      OutputParameter:"",
+      FixedParameter:""
+    }
+  }
+  var activity = FilterDataSelected.data.find(element => element.name = activityName && dateToString(stringToDate(element.date)) == date);
+  var sample = AllData.Samples.find(element => element.id == activity.sampleUsed);
+  var parentSample = AllData.Samples.find(element => element.id == sample.ParentSample);
   var currentDiv = document.getElementById("graphInfo");
   while (currentDiv.firstChild) {
       currentDiv.removeChild(currentDiv.firstChild);
   }
-  currentDiv.appendChild(createText(("Date : "+date)));
-  currentDiv.appendChild(createText(("filter : "+ filterName)));
-  currentDiv.appendChild(createText((activityName+" : "+nbTask)));
-  currentDiv.appendChild(createText(("Total of "+filterName+" : "+totalTask)));
+
+  currentDiv.appendChild(createText("Date : "+date));
+  currentDiv.appendChild(createText("Filter : "+ filterName));
+
+  var activtyheaddiv=document.createElement('div');
+  activtyheaddiv.setAttribute('class','activtyheaddiv');
+
+  var icon=document.createElement('i');
+  icon.setAttribute('class','fas fa-caret-right');
+
+  var activityheaderlabel=document.createElement('span');
+  activityheaderlabel.textContent=activityName+' information';
+
+  activtyheaddiv.appendChild(icon);
+  activtyheaddiv.appendChild(activityheaderlabel);
+  currentDiv.appendChild(activtyheaddiv);
+
+  var activtydiv=document.createElement('div');
+  activtydiv.setAttribute('class','activtyinfodiv');
+
+  activtydiv.appendChild(createText('version : '+activityinfo.version));
+  activtydiv.appendChild(createText("lifecycle : " +activityinfo.LifecycleStatus));
+  activtydiv.appendChild(createText('Cost activity : '+activityinfo.Cost));
+  activtydiv.appendChild(createText("Entry parameters : "+activityinfo.EntryParameters));
+  activtydiv.appendChild(createText("Fixed parameter : "+activityinfo.FixedParameter));
+  activtydiv.appendChild(createText("Output parameter : "+activityinfo.OutputParameter));
+
+  activtyheaddiv.onclick=function(){
+    if(activtydiv.style.display == 'flex'){
+      activtydiv.style.display='none';
+    }else{
+      activtydiv.style.display='flex';
+    }
+  }
+
+  currentDiv.appendChild(createText("Sample information "));
+  currentDiv.appendChild(createText("localization : "+sample.localization));
+  currentDiv.appendChild(createText("Storage condition : "+sample.storageCondition));
+  currentDiv.appendChild(createText("Amount : "+sample.amount +' mL'));
+  currentDiv.appendChild(createText("Due collection date : "+sample.dueCollectionDate));
+  currentDiv.appendChild(createText("Handling instructions : "+sample.handlingInstructions));
+  currentDiv.appendChild(createText("Due Collection date : "+sample.dueCollectionDate));
+  currentDiv.appendChild(createText("Planned collection date : "+sample.plannedCollectionDate));
+  if(parentSample){
+    currentDiv.appendChild(createText("Parent sample information "));
+    currentDiv.appendChild(createText("localization : "+parentSample.localization));
+    currentDiv.appendChild(createText("Storage condition : "+parentSample.storageCondition));
+    currentDiv.appendChild(createText("Amount : "+parentSample.amount +' mL'));
+    currentDiv.appendChild(createText("Due collection date : "+parentSample.dueCollectionDate));
+    currentDiv.appendChild(createText("Handling instructions : "+parentSample.handlingInstructions));
+    currentDiv.appendChild(createText("Due Collection date : "+parentSample.dueCollectionDate));
+    currentDiv.appendChild(createText("Planned collection date : "+parentSample.plannedCollectionDate));
+  }
+
 }
 function selectFilter(dataset,filterName){
-  return dataset.studyRisk.find( filter => filter.name==filterName);
+  return dataset.Tasks.find( filter => filter.name==filterName);
 }
 function editActivityFunction (filterName){
   var currentDiv = document.getElementById("activities");
@@ -331,8 +399,8 @@ function onLoadData(link,filtername,selected,callback){
   req.overrideMimeType("application/json");
   req.open('GET', link, true);
   req.onload  = function() {
-     var dataset = JSON.parse(req.responseText);
-     FilterDataSelected=selectFilter(dataset,filtername);
+     AllData = JSON.parse(req.responseText);
+     FilterDataSelected=selectFilter(AllData,filtername);
 
      var listdates= listDateSelected(FilterDataSelected);
      dateSetUp(listdates);

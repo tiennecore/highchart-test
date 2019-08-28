@@ -63,7 +63,7 @@ function listbutton(listNameActivities,div,filterName,value){
 }
 function initFormFilter(dataset){
   var currentDiv = document.getElementById("filterForm");
-  dataset.studyRisk.forEach(function (filter) {
+  dataset.Tasks.forEach(function (filter) {
     var optionDiv = document.createElement('option');
     optionDiv.setAttribute("id",filter.name);
     var optionText = document.createTextNode(filter.name);

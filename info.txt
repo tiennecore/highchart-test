@@ -1,0 +1,4 @@
+BioAssay
+Purity
+CEXtpH
+Percentage degradation
