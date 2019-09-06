@@ -19,6 +19,7 @@
     <script type="text/javascript" src="activity.js"></script>
     <script type="text/javascript" src="selected.js"></script>
     <script type="text/javascript" src="slider.js"></script>
+    <script type="text/javascript" src="search.js"></script>
     <link rel="stylesheet" href="DSStyle.css">
 
     <title>Study Risk Manager</title>
@@ -30,40 +31,39 @@
       <div class="row">
         <div class="col-2 columnFilter">
           <div class="headerSelectedFilters">
-            <i class="fas fa-filter"></i>
+            <i class="fas fa-filter"data-fa-transform="grow-10"></i>
           </div>
-          <div class="espaceSelectedFilters">
-            <div class="case presentation SelectedFilters">
+          <div class="case presentation SelectedFilters"id='selectedValues'>
               <div >
-                <i class="fas fa-caret-down"></i>
+                <i class="fas fa-caret-down"data-fa-transform="grow-10"></i>
                 <span>Selected Filters</span>
               </div>
-              <i class="fas fa-trash-alt " id='deleteAllSelected'></i>
+              <i class="fas fa-trash-alt "data-fa-transform="grow-10" id='deleteAllSelected'></i>
             </div>
-              <div class="case selectedItems"id='selectedValues'>
 
-              </div>
-          </div>
           <div class="TitleSelectedFilters">
             <div>
               <span>Filters</span>
               <i class="fas fa-chevron-down"></i>
             </div>
-            <i class="fas fa-search "></i>
+
           </div>
-          <input class='searchFilter' id='researchRegex' type="text" name="" value="">
+          <div class="research">
+            <input class='searchFilter' id='researchRegex' type="text" name="" value="">
+            <i class="fas fa-search "data-fa-transform="grow-10"></i>
+          </div>
           <div class="espaceFilter">
             <div class="filter activities"id='activities'>
               <div class="filter activities label" id='menuFilterLabel'>
                   <i class="fas fa-caret-right"></i>
-                  <i class="fas fa-filter"></i>
+                  <i class="fas fa-filter"data-fa-transform="grow-10"></i>
                   <span>Activities</span>
               </div>
             </div>
             <div class="filter date begin">
               <div class="filter date label"id='filterDateLabel-1'value='0'>
                 <i class="fas fa-caret-right"></i>
-                <i class="far fa-calendar-alt"></i>
+                <i class="far fa-calendar-alt"data-fa-transform="grow-10"></i>
                 <span>Date begin</span>
               </div>
               <input type="text" class="datePicker" autocomplete="false" id="inputDate-1" >
@@ -75,7 +75,7 @@
             <div class="filter date end">
               <div class="filter date label"id='filterDateLabel-2'value='0'>
                 <i class="fas fa-caret-right"></i>
-                <i class="far fa-calendar-alt"></i>
+                <i class="far fa-calendar-alt"data-fa-transform="grow-10"></i>
                 <span>Date End</span>
               </div>
               <input type="text" class="datePicker" autocomplete="false" id="inputDate-2" >
@@ -104,8 +104,10 @@
             <div id="slider-range"></div>
           </div>
         </div>
-        <div class="col">
-          <div class="col"id="graphInfo"></div>
+        <div class="col Result">
+          <div class="Exit Result">
+          </div>
+          <div class="col graphInfo"id="graphInfo"></div>
         </div>
       </div>
     </div>

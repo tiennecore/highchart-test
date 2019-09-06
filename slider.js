@@ -13,12 +13,12 @@ function mainslider(dateList){
 }
 
 function slideReplaceValues(){
-  DatesSlider.forEach(function(value,index){
+  DatesSelected.forEach(function(value,index){
     var labeldate=document.getElementById('labelslider'+index);
-    labeldate.textContent=dateToString(date);
+    labeldate.textContent=dateToString(value);
   });
   $( "#slider-range" ).slider({
-    values:[DatesSlider[0].getTime() / 1000,DatesSlider[1].getTime() / 1000]
+    values:[DatesSelected[0].getTime() / 1000,DatesSelected[1].getTime() / 1000]
   });
 }
 

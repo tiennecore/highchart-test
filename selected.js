@@ -1,8 +1,9 @@
 //selected activity
 function addActivitySelected(){
   var element=document.getElementById('selectedValues');
+  selectedvalue();
   if(FilterSelectedHtml.activities){
-    element.appendChild(newActivitySelected(FilterSelectedHtml.activities[FilterSelectedHtml.activities.length-1],'activities'));
+    element.insertAdjacentElement('afterend',newActivitySelected(FilterSelectedHtml.activities[FilterSelectedHtml.activities.length-1],'activities'));
   }
 
 }
@@ -29,11 +30,13 @@ function newActivitySelected(text,type){
        var newListActivities = FilterSelectedHtml.activities.filter(activity => activity != text);
        FilterSelectedHtml.activities=newListActivities;
     }
+
     onLoadData('data.json',FilterSelected,FilterSelectedHtml,function(){
       editActivityFunction(document.getElementById("filterForm").value);
     });
     var divselec=document.getElementById(type+text);
     divselec.parentNode.removeChild(divselec);
+    selectedvalue();
   }
 
   var divContain=document.createElement('div');
@@ -61,6 +64,7 @@ function addActivityToFilter(){
 //selected dates
 function addDateSelected(list,indexlist){
   if (dateMosNameToDate(list[indexlist])!=DateBeginEnds[indexlist]){
+    selectedvalue();
     var divtext=document.createElement('div');
 
     var iconText=document.createElement('i');
@@ -81,14 +85,13 @@ function addDateSelected(list,indexlist){
     divtrash.appendChild(trashIcon);
     divtrash.onclick=function(){
       DatesSelected[indexlist]=DateBeginEnds[indexlist];
-      var newDateWrite=DatesSelected[0].split('-');
-      getVal(newDateWrite[1],1,newDateWrite[2],newDateWrite[0]);
+      getVal(DatesSelected[indexlist].getDate(),indexlist+1,DatesSelected[indexlist].getFullYear(),DatesSelected[indexlist].getMonth());
       FilterSelectedHtml.dates[indexlist]='';
       onLoadData('data.json',FilterSelected,FilterSelectedHtml,);
       slideReplaceValues();
       var divselec=document.getElementById('Calendar'+indexlist);
       divselec.parentNode.removeChild(divselec);
-
+      selectedvalue();
     }
 
     var divContain=document.createElement('div');
@@ -101,24 +104,38 @@ function addDateSelected(list,indexlist){
       exitingCalendar.parentNode.removeChild(exitingCalendar);
     }
     var element=document.getElementById('selectedValues');
-    element.appendChild(divContain)
+    element.insertAdjacentElement('afterend',divContain)
 
   }
 }
 
 //supress allActivities
 function emptyAll(){
+  FilterSelectedHtml.activities.forEach(function(element){
+    var divselec=document.getElementById('activities'+element);
+    divselec.parentNode.removeChild(divselec);
+  });
+  FilterSelectedHtml.dates.forEach(function(element,index){
+    var divselec=document.getElementById('Calendar'+index);
+    divselec.parentNode.removeChild(divselec);
+  });
   FilterSelectedHtml={
     'activities':[],
-    'dates':['','']
+    'dates':[]
   };
+  selectedvalue();
   ListDates=[];
-  var currentdiv=document.getElementById('selectedValues');
-  while (currentdiv.firstChild) {
-    currentdiv.removeChild(currentdiv.firstChild);
-  }
-
   onLoadData('data.json',FilterSelected,FilterSelectedHtml,function(){
     editActivityFunction(document.getElementById("filterForm").value);
   });
+}
+
+function selectedvalue(){
+  var divselected=document.getElementById('selectedValues');
+
+  if (FilterSelectedHtml.activities.length>0 || FilterSelectedHtml.dates.some(date => date!='')){
+    divselected.style.display='flex';
+  }else{
+    divselected.style.display='none';
+  }
 }
